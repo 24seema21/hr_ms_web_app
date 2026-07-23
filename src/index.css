@@ -1,0 +1,81 @@
+@import "tailwindcss";
+
+/*
+  Tailwind v4 is configured in CSS, not in a `tailwind.config.js`.
+
+  Every custom property declared inside `@theme` becomes a real Tailwind
+  utility namespace. Declaring `--color-brand-600` here is what makes
+  `bg-brand-600`, `text-brand-600`, `border-brand-600`, `ring-brand-600`
+  (and so on) exist — we never write them out by hand.
+
+  Practical payoff: rebranding the entire product later is an edit to this
+  one block, not a find-and-replace across a hundred components.
+*/
+@theme {
+  /* Brand — indigo. Used for primary actions, links and accents. */
+  --color-brand-50: #eef2ff;
+  --color-brand-100: #e0e7ff;
+  --color-brand-200: #c7d2fe;
+  --color-brand-300: #a5b4fc;
+  --color-brand-400: #818cf8;
+  --color-brand-500: #6366f1;
+  --color-brand-600: #4f46e5;
+  --color-brand-700: #4338ca;
+  --color-brand-800: #3730a3;
+  --color-brand-900: #312e81;
+  --color-brand-950: #1e1b4b;
+
+  /* Ink — the neutral ramp for text, borders and page chrome. */
+  --color-ink-50: #f8fafc;
+  --color-ink-100: #f1f5f9;
+  --color-ink-200: #e2e8f0;
+  --color-ink-300: #cbd5e1;
+  --color-ink-400: #94a3b8;
+  --color-ink-500: #64748b;
+  --color-ink-600: #475569;
+  --color-ink-700: #334155;
+  --color-ink-800: #1e293b;
+  --color-ink-900: #0f172a;
+  --color-ink-950: #020617;
+
+  /* Feedback colours — validation errors, success states. */
+  --color-danger-50: #fef2f2;
+  --color-danger-200: #fecaca;
+  --color-danger-600: #dc2626;
+  --color-danger-700: #b91c1c;
+  --color-success-50: #f0fdf4;
+  --color-success-600: #16a34a;
+
+  /* Typography */
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  /* Corner radii — one scale, so cards/inputs/buttons stay visually related. */
+  --radius-card: 0.875rem;
+  --radius-control: 0.625rem;
+}
+
+/*
+  `@layer base` puts these rules in Tailwind's base layer, which means any
+  utility class added to an element still wins over them. Plain CSS written
+  outside a layer would instead fight those utilities.
+*/
+@layer base {
+  html {
+    /* Anchor links (e.g. "#features") glide instead of jumping. */
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-white font-sans text-ink-800 antialiased;
+  }
+
+  /*
+    A visible focus ring on every interactive element, for keyboard users.
+    `:focus-visible` (not `:focus`) means mouse clicks don't show the ring,
+    but Tab does — which is the behaviour people expect.
+  */
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-brand-600;
+  }
+}

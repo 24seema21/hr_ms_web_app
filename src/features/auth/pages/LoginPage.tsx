@@ -3,7 +3,6 @@ import { Logo } from '@/shared/components/ui/Logo'
 import { ROUTES } from '@/shared/constants/routes'
 import { LoginForm } from '../components/LoginForm'
 import { useAuth } from '../hooks/useAuth'
-import { DEMO_CREDENTIALS } from '../api/authApi'
 
 const HIGHLIGHTS = [
   { id: 'directory', text: 'Every employee record in one searchable place' },
@@ -97,19 +96,11 @@ export function LoginPage() {
           </p>
 
           {/*
-            Demo credentials on screen: without a real backend this is the only
-            way the login flow can be tried. Delete this block the moment a
-            real auth service is connected.
+            The demo-credentials panel that used to sit here is gone: sign-in
+            now runs against the real backend, and accounts come from the
+            `users` table. Printing working credentials on a real login page is
+            not a shortcut worth keeping.
           */}
-          <div className="mt-6 rounded-control border border-brand-200 bg-brand-50 px-4 py-3 text-sm text-brand-900">
-            <p className="font-semibold">Demo account</p>
-            <p className="mt-1">
-              <code className="font-mono">{DEMO_CREDENTIALS.email}</code>
-              {' · '}
-              <code className="font-mono">{DEMO_CREDENTIALS.password}</code>
-            </p>
-          </div>
-
           <div className="mt-8">
             <LoginForm />
           </div>

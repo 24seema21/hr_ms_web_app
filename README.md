@@ -13,21 +13,46 @@ React Hook Form + Zod · Vitest + Testing Library.
 
 ```bash
 npm install
-cp .env.example .env.local   # optional in Phase 1 — auth is mocked
+cp .env.example .env.local   # optional — defaults to http://localhost:8080
 npm run dev
 ```
 
-Open the URL Vite prints (usually http://localhost:5173).
+Open http://localhost:5173. The port is pinned with `strictPort`, so a clash
+fails to start rather than quietly moving to 5174 — see below for why.
 
-### Demo credentials
+### The backend must be running
 
-Authentication is mocked in Phase 1, so exactly one account exists:
+Sign-in is wired to the real API (`../HRMS_API`, Go + Gin + MySQL). Start it,
+and its MySQL database, before trying to log in:
 
-| Email         | Password      |
-| ------------- | ------------- |
-| `hr@demo.com` | `Password123` |
+```bash
+cd ../HRMS_API/hr_ms_api/login && go run .
+```
 
-They are also shown on the login page itself.
+Accounts come from the `users` table — there are no demo credentials any more.
+
+**Two things that will bite you**, both of which surface in the UI as
+_"Could not reach the server"_:
+
+- The API allows exactly one CORS origin, `http://localhost:5173`. Serve the
+  frontend from any other port and the browser blocks every login before it
+  reaches Go. That is what `server.strictPort` in `vite.config.ts` protects.
+- The API dials MySQL at startup and exits if it cannot connect, so "the
+  frontend cannot reach the backend" is often really "MySQL is not running".
+
+### What the API returns
+
+`POST /login` takes `{ "email", "password" }` and answers with a message only:
+
+| Status | Body                                | Meaning                    |
+| ------ | ----------------------------------- | -------------------------- |
+| 200    | `{"message":"Login Successful"}`    | Credentials verified       |
+| 401    | `{"message":"Invalid Email"}`       | No such email              |
+| 401    | `{"message":"Wrong Password"}`      | bcrypt comparison failed   |
+| 400    | `{"message":"Invalid Request"}`     | Body was not valid JSON    |
+
+There is **no token and no profile** in the success response, and no `/logout`
+route. See "Known gaps" below.
 
 ---
 
@@ -113,15 +138,38 @@ latter is deprecated from v7 onward.
 
 ---
 
-## Swapping in a real backend
+## How the API layer is wired
 
-All the fake data lives in **one file**:
-[`src/features/auth/api/authApi.ts`](src/features/auth/api/authApi.ts).
+Two files know that a network exists:
 
-No component, hook or context knows whether auth is mocked or real — they only
-know that `login()` returns a `Promise<AuthResult>` and rejects with an
-`AuthError`. Connecting the real API means rewriting the bodies of those two
-functions to `fetch` from `VITE_API_BASE_URL`, and changing nothing else.
+- [`src/shared/lib/httpClient.ts`](src/shared/lib/httpClient.ts) — one
+  configured axios instance (base URL, timeout, JSON headers). Every feature
+  imports this rather than calling `axios.get(...)` directly, so a change of
+  host or a global 401 handler has exactly one place to live.
+- [`src/features/auth/api/authApi.ts`](src/features/auth/api/authApi.ts) — the
+  auth feature's only door to the outside. It translates HTTP into domain
+  objects: a 401 becomes an `AuthError('invalid_credentials')`, no response at
+  all becomes `AuthError('network')`, anything else `AuthError('server')`.
+
+No component, hook or context knows a status code exists — they only know that
+`login()` returns a `Promise<AuthResult>` and rejects with an `AuthError`. That
+contract is why replacing the Phase 1 mock with the real endpoint touched the
+API layer and nothing above it.
+
+### Known gaps in the backend contract
+
+Worth knowing before building on top of this:
+
+- **No token.** A successful login returns only a message, so `AuthResult.token`
+  is optional and nothing is sent on later requests. Whatever comes next should
+  be an `httpOnly; Secure; SameSite` cookie, not a JSON token (see below).
+- **No profile.** The server returns no id, name or role, so `authApi` derives a
+  placeholder `User` from the email that was just verified, with the role
+  defaulting to `employee` — the least-privileged option, because the frontend
+  must never grant a permission the backend has not confirmed. The fix is for
+  `POST /login` to return the profile columns, or for a `GET /me` to exist.
+- **No `/logout`.** `authApi.logout()` is a deliberate no-op; signing out clears
+  the client session only, and the server has nothing to revoke yet.
 
 ### Security: read before going to production
 
@@ -134,9 +182,13 @@ functions to `fetch` from `VITE_API_BASE_URL`, and changing nothing else.
   readable by any JavaScript on the page, so one XSS bug would hand over a
   live session. The real token belongs in an `httpOnly; Secure; SameSite`
   cookie set by the backend.
-- The mock API returns the **same message** for an unknown email and a wrong
-  password, on purpose. Distinguishing them tells an attacker which addresses
-  are registered.
+- The backend distinguishes `Invalid Email` from `Wrong Password`;
+  `authApi.ts` **deliberately throws that distinction away** and shows one
+  message for both. Passing it on would let anyone use the login form to
+  discover which addresses are registered — account enumeration, and the first
+  step of a credential-stuffing run. The server's wording is still reachable on
+  the error's `cause` while debugging. Ideally the API stops distinguishing
+  them too.
 
 ---
 
@@ -156,10 +208,11 @@ input.
 
 ## Scope
 
-**In Phase 1:** landing page, login page, mock auth, session persistence,
-route guard, and a `/dashboard` stub that exists only so the login flow has a
-destination and can be verified end to end.
+**Done:** landing page, login page wired to the live `POST /login`, session
+persistence, route guard, and a `/dashboard` stub that exists only so the login
+flow has a destination and can be verified end to end.
 
-**Not in Phase 1:** signup, forgot-password, real backend, dashboard features,
-the employee/attendance/leave/payroll modules, role-based permissions, i18n,
+**Not yet:** signup, forgot-password, server-issued sessions, a real user
+profile from the API, dashboard features, the
+employee/attendance/leave/payroll modules, role-based permissions, i18n,
 dark mode.

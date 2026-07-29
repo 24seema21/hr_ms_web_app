@@ -5,6 +5,7 @@ import { Button } from '@/shared/components/ui/Button'
 import { TextField } from '@/shared/components/ui/TextField'
 import { ROUTES } from '@/shared/constants/routes'
 import { useAuth } from '../hooks/useAuth'
+import { AuthError } from '../types'
 import { loginSchema } from '../schemas/loginSchema'
 import type { LoginFormValues } from '../schemas/loginSchema'
 
@@ -46,18 +47,27 @@ export function LoginForm() {
         a session you are already inside.
       */
       await navigate(ROUTES.DASHBOARD, { replace: true })
-    } catch {
+    } catch (caught) {
       /*
         `root` is RHF's slot for an error that belongs to the whole form
         rather than to one field. "Wrong password" is not really about the
         password input alone — it is about the combination — so attaching it
         to a single field would be misleading.
 
+        The message comes from the error rather than being hard-coded here, so
+        that "the backend is not running" does not get reported as "your
+        password is wrong" — the single most confusing thing a login form can
+        do. Only an AuthError carries text written for a human; anything else
+        is an unexpected bug whose raw message could leak internals.
+
         Note what we do NOT do: clear the fields. Wiping a password on a failed
         attempt is a classic hostile touch. Retyping is punishment for a typo.
       */
       setError('root', {
-        message: 'That email and password combination is not recognised.',
+        message:
+          caught instanceof AuthError
+            ? caught.message
+            : 'Something went wrong. Please try again.',
       })
     }
   }

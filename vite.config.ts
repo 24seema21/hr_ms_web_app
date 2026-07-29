@@ -9,6 +9,22 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
   plugins: [react(), tailwindcss()],
 
+  server: {
+    /*
+      Pinned, and `strictPort` so a clash fails loudly instead of quietly
+      moving to 5174.
+
+      The backend's CORS config allows exactly one origin —
+      `http://localhost:5173` (HRMS_API/hr_ms_api/login/main.go). Served from
+      any other port, every login request is blocked by the browser before it
+      reaches Go, and the only clue is a CORS message in the console while the
+      form reports "could not reach the server". Failing to start is far easier
+      to diagnose.
+    */
+    port: 5173,
+    strictPort: true,
+  },
+
   resolve: {
     alias: {
       // Lets us write `@/shared/components/ui/Button` instead of `../../../shared/...`.

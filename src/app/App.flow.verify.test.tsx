@@ -1,11 +1,55 @@
-import { expect, test } from 'vitest'
+import { beforeEach, expect, test, vi } from 'vitest'
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { httpResponseError } from '@/test/httpErrors'
+
+/*
+  The network is the only thing faked here.
+
+  Everything else is real — the router, the auth provider, the form, and the
+  API layer's own status-code mapping. Stubbing `authApi` instead would leave
+  the most breakable part of sign-in (translating a 401 into the right message)
+  untested by any flow test. Stubbing nothing would make this suite depend on
+  a Go server and a MySQL database being up, which is not a unit test.
+
+  The factory must not reference anything declared below it: `vi.mock` is
+  hoisted above the imports, so the constants in this file do not exist yet
+  when it runs. The fake responses are installed per-test instead.
+*/
+vi.mock('@/shared/lib/httpClient', async (importOriginal) => {
+  const actual =
+    await importOriginal<typeof import('@/shared/lib/httpClient')>()
+  return { ...actual, httpClient: { post: vi.fn() } }
+})
+
+import { httpClient } from '@/shared/lib/httpClient'
 import { App } from './App'
 import { router } from './routes'
 import { readStoredUser } from '@/features/auth/lib/authStorage'
 
 const LONG = { timeout: 5000 }
+
+/** The one account our fake `POST /login` accepts. */
+const ACCOUNT = { email: 'asha.rao@harkhr.com', password: 'Password123' }
+
+/**
+ * Stands in for the Go handler, replying exactly as it does:
+ * 200 `{"message":"Login Successful"}` or 401 `{"message":"Wrong Password"}`.
+ */
+function installFakeBackend() {
+  vi.mocked(httpClient.post).mockImplementation(async (_url, body) => {
+    const { email, password } = body as { email: string; password: string }
+    if (email !== ACCOUNT.email || password !== ACCOUNT.password) {
+      throw httpResponseError(401, { message: 'Wrong Password' })
+    }
+    return { data: { message: 'Login Successful' } }
+  })
+}
+
+beforeEach(() => {
+  vi.clearAllMocks()
+  installFakeBackend()
+})
 
 test('full landing → login → dashboard → logout flow', async () => {
   const user = userEvent.setup()
@@ -50,9 +94,9 @@ test('full landing → login → dashboard → logout flow', async () => {
   ).toBeInTheDocument()
   console.log('✓ 4  invalid email errors on blur')
 
-  // 5. Wrong password → form-level error, password NOT cleared.
+  // 5. Wrong password → 401 from the API → form-level error, password NOT cleared.
   await user.clear(email)
-  await user.type(email, 'hr@demo.com')
+  await user.type(email, ACCOUNT.email)
   const password = screen.getByLabelText(/password/i)
   await user.type(password, 'WrongPassword')
   await user.click(submit)
@@ -64,7 +108,7 @@ test('full landing → login → dashboard → logout flow', async () => {
 
   // 6. Correct credentials → dashboard showing the user's name.
   await user.clear(password)
-  await user.type(password, 'Password123')
+  await user.type(password, ACCOUNT.password)
   await user.click(submit)
   expect(
     await screen.findByRole('heading', { name: /welcome back, asha rao/i }, LONG),
@@ -73,7 +117,7 @@ test('full landing → login → dashboard → logout flow', async () => {
   console.log('✓ 6  valid login redirects to /dashboard with the user name')
 
   // 7. Session persisted, so a refresh keeps you logged in.
-  expect(readStoredUser()).toMatchObject({ email: 'hr@demo.com' })
+  expect(readStoredUser()).toMatchObject({ email: ACCOUNT.email })
   // rememberMe was left unchecked → sessionStorage, not localStorage.
   expect(window.sessionStorage.getItem('harkhr.auth.user')).not.toBeNull()
   expect(window.localStorage.getItem('harkhr.auth.user')).toBeNull()
@@ -111,11 +155,8 @@ test('remember me stores the session in localStorage instead', async () => {
 
   render(<App />)
 
-  await user.type(
-    await screen.findByLabelText(/work email/i),
-    'hr@demo.com',
-  )
-  await user.type(screen.getByLabelText(/password/i), 'Password123')
+  await user.type(await screen.findByLabelText(/work email/i), ACCOUNT.email)
+  await user.type(screen.getByLabelText(/password/i), ACCOUNT.password)
   await user.click(screen.getByRole('checkbox', { name: /remember me/i }))
   await user.click(screen.getByRole('button', { name: /^sign in$/i }))
 

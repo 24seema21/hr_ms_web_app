@@ -63,15 +63,13 @@ describe('loginSchema', () => {
       )
     })
 
-    it('rejects fewer than 8 characters', () => {
-      expect(errorFor(validValues({ password: 'Pass1' }), 'password')).toBe(
-        'Password must be at least 8 characters',
-      )
-    })
-
-    it('accepts exactly 8 characters', () => {
-      // Boundary check: off-by-one in a `min` is the classic mistake here.
-      expect(loginSchema.safeParse(validValues({ password: 'Pass1234' })).success).toBe(
+    it('accepts a short password and lets the server judge it', () => {
+      /*
+        Guards the deliberate absence of a length rule. Only the backend knows
+        whether a password is correct, and a client-side minimum can do nothing
+        but lock out an account whose password is shorter than today's policy.
+      */
+      expect(loginSchema.safeParse(validValues({ password: 'abc' })).success).toBe(
         true,
       )
     })

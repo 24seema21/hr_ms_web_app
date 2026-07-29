@@ -123,7 +123,10 @@ describe('LoginForm', () => {
   it('shows a form-level error when the login is rejected', async () => {
     const user = userEvent.setup()
     vi.mocked(authApi.login).mockRejectedValue(
-      new AuthError('invalid_credentials', 'nope'),
+      new AuthError(
+        'invalid_credentials',
+        'That email and password combination is not recognised.',
+      ),
     )
     renderLoginForm()
 
@@ -141,10 +144,34 @@ describe('LoginForm', () => {
     )
   })
 
+  it('reports an unreachable backend as such, not as a wrong password', async () => {
+    const user = userEvent.setup()
+    vi.mocked(authApi.login).mockRejectedValue(
+      new AuthError('network', 'Could not reach the server. Check your connection and try again.'),
+    )
+    renderLoginForm()
+
+    await user.type(screen.getByLabelText(/work email/i), 'asha.rao@harkhr.com')
+    await user.type(screen.getByLabelText(/password/i), 'Password123')
+    await user.click(screen.getByRole('button', { name: /sign in/i }))
+
+    /*
+      The form shows the error's own message rather than a hard-coded one, so
+      "the API is down" cannot be reported as "your password is wrong" — which
+      would send the user off resetting a password that was never the problem.
+    */
+    expect(await screen.findByRole('alert')).toHaveTextContent(
+      /could not reach the server/i,
+    )
+  })
+
   it('does not clear the password after a failed attempt', async () => {
     const user = userEvent.setup()
     vi.mocked(authApi.login).mockRejectedValue(
-      new AuthError('invalid_credentials', 'nope'),
+      new AuthError(
+        'invalid_credentials',
+        'That email and password combination is not recognised.',
+      ),
     )
     renderLoginForm()
 

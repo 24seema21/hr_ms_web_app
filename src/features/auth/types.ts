@@ -26,13 +26,18 @@ export interface LoginCredentials {
 export interface AuthResult {
   user: User
   /**
-   * Stand-in for the real access token.
+   * Optional, because the current backend does not issue one.
    *
-   * PHASE 2 / SECURITY: a real token must never be handed to JavaScript at
-   * all. The backend should set it as an httpOnly, Secure, SameSite cookie —
-   * see the note in ../context/AuthContext.tsx.
+   * `POST /login` answers a valid sign-in with `{"message":"Login Successful"}`
+   * and nothing else — no token, no profile. Marking this optional keeps the
+   * type honest instead of inventing a token the server never sent.
+   *
+   * SECURITY, for when the backend does issue one: a real access token should
+   * never be handed to JavaScript at all. The correct design is a `Set-Cookie`
+   * header marked `httpOnly; Secure; SameSite=Lax` — see the note in
+   * ../lib/authStorage.ts.
    */
-  token: string
+  token?: string
 }
 
 /**
@@ -45,8 +50,13 @@ export interface AuthResult {
 export class AuthError extends Error {
   readonly code: AuthErrorCode
 
-  constructor(code: AuthErrorCode, message: string) {
-    super(message)
+  /**
+   * `options` carries the standard `cause`, which is where the underlying
+   * axios error goes. The user sees `message`; a developer opening the console
+   * can follow `cause` down to the actual status code and response body.
+   */
+  constructor(code: AuthErrorCode, message: string, options?: ErrorOptions) {
+    super(message, options)
     // Without this, `error.name` reads "Error" in logs and dev tools.
     this.name = 'AuthError'
     // Note: assigned in the body rather than declared as a constructor
@@ -56,5 +66,20 @@ export class AuthError extends Error {
   }
 }
 
-export const AUTH_ERROR_CODES = ['invalid_credentials', 'network'] as const
+/*
+  Three distinct failures, because they need three different responses from the
+  UI and from the person reading the message:
+
+  - `invalid_credentials` — the server checked and said no. Retyping may help.
+  - `network`             — no reply at all: backend down, offline, CORS, or a
+                            timeout. Retyping will not help.
+  - `server`              — the server replied with a failure that is not about
+                            the credentials (a 500, or a 400 we caused). That
+                            is a bug, not user error.
+*/
+export const AUTH_ERROR_CODES = [
+  'invalid_credentials',
+  'network',
+  'server',
+] as const
 export type AuthErrorCode = (typeof AUTH_ERROR_CODES)[number]

@@ -21,10 +21,17 @@ export const loginSchema = z.object({
     .min(1, 'Email is required')
     .pipe(z.email('Enter a valid email address')),
 
-  password: z
-    .string()
-    .min(1, 'Password is required')
-    .min(8, 'Password must be at least 8 characters'),
+  /*
+    "Required" is the only rule a *sign-in* password gets.
+
+    A minimum length belongs on the sign-up form, where it shapes the password
+    being created. Here the password already exists, and the only authority on
+    whether it is correct is the bcrypt comparison in the backend. A client-side
+    `min(8)` cannot make a wrong password right — but it can lock out a real
+    account whose password predates the rule, and it tells an attacker the
+    shape of what they are guessing before they spend a single request.
+  */
+  password: z.string().min(1, 'Password is required'),
 
   rememberMe: z.boolean(),
 })

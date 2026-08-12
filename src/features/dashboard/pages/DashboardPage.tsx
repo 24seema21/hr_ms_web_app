@@ -1,76 +1,136 @@
-import { useNavigate } from 'react-router'
-import { Container } from '@/shared/components/layout/Container'
-import { Logo } from '@/shared/components/ui/Logo'
-import { Button } from '@/shared/components/ui/Button'
+import { ButtonLink } from '@/shared/components/ui/ButtonLink'
+import { Badge } from '@/shared/components/ui/Badge'
+import {
+  CalendarIcon,
+  UsersIcon,
+  WalletIcon,
+} from '@/shared/components/ui/icons'
 import { ROUTES } from '@/shared/constants/routes'
 import { useAuth } from '@/features/auth/hooks/useAuth'
+import { AttendanceCard } from '@/features/attendance/components/AttendanceCard'
+
+/*
+  The modules, and what is actually behind each one today.
+
+  `to: null` means the screen does not exist yet, and the card says so instead
+  of linking somewhere that 404s. Being straight about what is built is worth
+  more than a grid of tiles that all look equally real.
+*/
+const MODULES = [
+  {
+    id: 'directory',
+    title: 'Employee directory',
+    description:
+      'Add, edit and remove the people in your organisation. Backed by the live /employee API.',
+    icon: UsersIcon,
+    to: ROUTES.EMPLOYEES,
+  },
+  /*
+    No attendance tile: the card above *is* attendance, and a "later phase"
+    badge under a working check-in button is the kind of contradiction that
+    makes people distrust the rest of the page. The tile comes back in phase 3b
+    pointing at /attendance, when there is a history page behind it.
+  */
+  {
+    id: 'leave',
+    title: 'Leave',
+    description: 'Balances, requests and approvals routed to the right manager.',
+    icon: CalendarIcon,
+    to: null,
+  },
+  {
+    id: 'payroll',
+    title: 'Payroll',
+    description:
+      'Salary structures and statutory deductions, calculated from attendance.',
+    icon: WalletIcon,
+    to: null,
+  },
+] as const
 
 /**
- * PLACEHOLDER — not Phase 1 feature work.
+ * The landing pad after sign-in.
  *
- * Logging in has to land somewhere, and without a destination the login flow
- * cannot be verified end to end. This page exists only to prove that the
- * happy path works: it greets the signed-in user and can sign them out.
- * Phase 2 replaces it with the real dashboard.
+ * Deliberately static: it links to the modules and greets the signed-in user,
+ * and it does not fetch anything. A dashboard that opens with four API calls
+ * is four chances to greet somebody with an error message — and every number
+ * worth showing here (headcount, absences, payroll status) belongs to a module
+ * that does not exist yet. It will earn its data when there is data to earn.
+ *
+ * The header, navigation and sign-out button come from `AppShell`, so this
+ * page — and every page after it — does not grow its own copy.
  */
 export function DashboardPage() {
-  const { user, logout } = useAuth()
-  const navigate = useNavigate()
-
-  /*
-    Navigate away *first*, then clear the session — the order matters.
-
-    Do it the other way round and `logout()` sets `user` to null while this
-    page is still mounted inside ProtectedRoute. The guard immediately sees a
-    logged-out user and redirects to /login, which is correct for someone who
-    wandered in without a session but wrong here: logging out should land you
-    on the public landing page, not the sign-in form. Leaving the protected
-    route before clearing state avoids the race entirely, with no flash of the
-    login page in between.
-  */
-  const handleLogout = async () => {
-    await navigate(ROUTES.HOME, { replace: true })
-    await logout()
-  }
+  const { user } = useAuth()
 
   return (
-    <div className="min-h-dvh bg-ink-50">
-      <header className="border-b border-ink-200 bg-white">
-        <Container className="flex h-16 items-center justify-between gap-4">
-          <Logo />
-          <Button variant="secondary" size="sm" onClick={handleLogout}>
-            Log out
-          </Button>
-        </Container>
-      </header>
+    <div className="mx-auto w-full max-w-[92rem] px-4 py-8 sm:px-6 lg:px-8">
+      <p className="type-label text-brand-600">Workspace</p>
+      <h1 className="type-wide mt-1.5 text-2xl font-bold tracking-tight text-ink-900">
+        {/*
+          `user?.name` — the optional chain is belt-and-braces. ProtectedRoute
+          guarantees a user by the time this renders, but the type does not
+          know that, and a guard is cheaper than a crash.
+        */}
+        Welcome back, {user?.name}
+      </h1>
+      <p className="mt-1.5 text-sm text-ink-600">
+        Signed in as {user?.email} ·{' '}
+        <span className="font-medium text-ink-800">{user?.role}</span>
+      </p>
 
-      <main>
-        <Container className="py-12">
-          <h1 className="text-2xl font-bold tracking-tight text-ink-900">
-            {/*
-              `user?.name` — the optional chain is belt-and-braces. ProtectedRoute
-              guarantees a user by the time this renders, but the type does not
-              know that, and a guard is cheaper than a crash.
-            */}
-            Welcome back, {user?.name}
-          </h1>
-          <p className="mt-2 text-ink-600">
-            Signed in as {user?.email} · role:{' '}
-            <span className="font-medium text-ink-800">{user?.role}</span>
-          </p>
+      {/*
+        Attendance comes first, and nothing shares its row.
 
-          <div className="mt-8 rounded-card border border-dashed border-ink-300 bg-white p-8">
-            <h2 className="text-base font-semibold text-ink-900">
-              Nothing here yet
+        It is the only thing on this page somebody has to *do* — twice a day,
+        every day — and everything below it is navigation. A dashboard that
+        opens with four equal tiles makes the daily action the same size as a
+        link to a module that does not exist yet.
+      */}
+      <div className="mt-8">
+        <AttendanceCard />
+      </div>
+
+      <h2 className="type-label mt-10 text-ink-500">Modules</h2>
+
+      <ul className="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        {MODULES.map((module) => (
+          <li
+            key={module.id}
+            className="flex flex-col rounded-card border border-ink-200 bg-white p-6 shadow-card"
+          >
+            <span className="flex h-10 w-10 items-center justify-center rounded-control bg-brand-50 text-brand-600">
+              <module.icon className="h-5 w-5" />
+            </span>
+
+            <h2 className="type-wide mt-4 text-base font-semibold text-ink-900">
+              {module.title}
             </h2>
-            <p className="mt-2 max-w-prose text-sm text-ink-600">
-              This stub exists so the login flow has a destination. The employee
-              directory, attendance, leave and payroll modules arrive in the
-              next phase.
+            <p className="mt-2 flex-1 text-sm text-pretty text-ink-600">
+              {module.description}
             </p>
-          </div>
-        </Container>
-      </main>
+
+            <div className="mt-5">
+              {module.to ? (
+                /*
+                  A ButtonLink, not a Button with an onClick that navigates.
+                  This goes somewhere, so it must be a real `<a>`: middle-click
+                  to open in a tab, right-click to copy the address, and a
+                  screen reader announcing "link" rather than "button" all
+                  follow from using the right element.
+                */
+                <ButtonLink to={module.to} size="sm">
+                  Open directory
+                </ButtonLink>
+              ) : (
+                /* A badge, not a disabled button: there is no action to
+                   disable, and a greyed-out button invites clicking. */
+                <Badge mono>Later phase</Badge>
+              )}
+            </div>
+          </li>
+        ))}
+      </ul>
     </div>
   )
 }

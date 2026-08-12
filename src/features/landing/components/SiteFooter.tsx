@@ -4,15 +4,20 @@ import { Logo } from '@/shared/components/ui/Logo'
 import { ROUTES } from '@/shared/constants/routes'
 
 const FOOTER_LINKS = [
-  { id: 'features', label: 'Features', href: '#features' },
-  { id: 'how-it-works', label: 'How it works', href: '#how-it-works' },
+  { id: 'modules', label: 'Modules', href: '#modules' },
+  { id: 'rollout', label: 'Rollout', href: '#rollout' },
 ] as const
 
 export function SiteFooter() {
   return (
-    <footer className="border-t border-ink-200 bg-white py-12">
+    <footer className="border-t border-ink-200 bg-shell py-12">
       <Container className="flex flex-col items-center gap-8 sm:flex-row sm:justify-between">
-        <Logo />
+        <div className="flex flex-col items-center gap-2 sm:items-start">
+          <Logo />
+          <p className="font-mono text-xs text-ink-500">
+            HR, payroll and people ops on one record
+          </p>
+        </div>
 
         {/*
           The header hides its nav below `sm`; this one does not. Between them
@@ -33,7 +38,7 @@ export function SiteFooter() {
             <li>
               <Link
                 to={ROUTES.LOGIN}
-                className="text-sm text-ink-600 transition-colors hover:text-ink-900"
+                className="text-sm font-medium text-brand-700 transition-colors hover:text-brand-800"
               >
                 Sign in
               </Link>

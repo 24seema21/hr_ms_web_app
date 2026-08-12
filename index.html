@@ -6,12 +6,35 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>HarkHR — HR, payroll and people ops in one place</title>
+    <title>HarkHR — the register your whole HR team writes in</title>
     <meta
       name="description"
-      content="HarkHR is an HR management system for growing teams: employee directory, attendance, leave, payroll, performance reviews and reporting in a single workspace."
+      content="HarkHR is an HR management system for growing teams: one employee record read by directory, attendance, leave, payroll, performance and reporting."
     />
-    <meta name="theme-color" content="#4f46e5" />
+    <!-- Matches --color-brand-900: the browser chrome on Android and the iOS
+         status bar tint to the same ink green as the product. -->
+    <meta name="theme-color" content="#0b2f2a" />
+
+    <!--
+      Typefaces, in two roles (see the comment block in src/index.css).
+
+      `preconnect` opens the TCP + TLS handshake to both font hosts while the
+      HTML is still parsing, which is worth ~100-300ms on a cold load. The
+      second one needs `crossorigin` because font *files* are fetched as CORS
+      requests, and a preconnect without it opens a connection that the real
+      request cannot reuse.
+
+      `display=swap` renders the fallback face immediately and swaps when the
+      webfont lands — the alternative is up to three seconds of invisible text.
+      The stacks in @theme name close system fallbacks so that swap is a small
+      shift rather than a reflow of the whole page.
+    -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..800&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <div id="root"></div>

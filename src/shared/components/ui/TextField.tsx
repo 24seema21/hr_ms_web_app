@@ -1,14 +1,30 @@
 import { useId } from 'react'
-import type { InputHTMLAttributes, Ref } from 'react'
+import type { InputHTMLAttributes, ReactNode, Ref } from 'react'
 import { cn } from '@/shared/lib/cn'
 
 export interface TextFieldProps extends InputHTMLAttributes<HTMLInputElement> {
   /** Always required — a placeholder is not a label. */
   label: string
+  /**
+   * Hides the label visually while keeping it in the accessibility tree.
+   *
+   * For the one case where the surrounding UI already makes the field obvious
+   * (a search box under a magnifier icon in a toolbar) and a stacked label
+   * would cost a row of vertical space in dense chrome. The label itself is
+   * never dropped: `getByLabelText('Search')` must keep working, for the
+   * screen reader as much as for the test.
+   */
+  hideLabel?: boolean
   /** Validation message. Its presence is what puts the field in an error state. */
   error?: string
   /** Optional helper text shown under the input when there is no error. */
   hint?: string
+  /** A decorative glyph inside the field's leading edge. */
+  leadingIcon?: ReactNode
+  /** A control inside the trailing edge — a clear button, a unit, a counter. */
+  trailing?: ReactNode
+  /** `sm` for toolbars and filters, `md` for forms. */
+  fieldSize?: 'sm' | 'md'
   /**
    * In React 19 `ref` is an ordinary prop on function components — the old
    * `forwardRef` wrapper is gone. This is what lets React Hook Form's
@@ -19,8 +35,12 @@ export interface TextFieldProps extends InputHTMLAttributes<HTMLInputElement> {
 
 export function TextField({
   label,
+  hideLabel = false,
   error,
   hint,
+  leadingIcon,
+  trailing,
+  fieldSize = 'md',
   id,
   className,
   ref,
@@ -52,27 +72,60 @@ export function TextField({
 
   return (
     <div className={cn('flex flex-col gap-1.5', className)}>
-      <label htmlFor={inputId} className="text-sm font-medium text-ink-700">
+      <label
+        htmlFor={inputId}
+        className={cn(
+          'text-sm font-medium text-ink-700',
+          hideLabel && 'sr-only',
+        )}
+      >
         {label}
       </label>
 
-      <input
-        id={inputId}
-        ref={ref}
-        // `aria-invalid` is the programmatic half of the red border. The colour
-        // alone is invisible to a screen reader — and to a colour-blind user.
-        aria-invalid={hasError}
-        aria-describedby={describedBy}
-        className={cn(
-          'h-11 w-full rounded-control border bg-white px-3.5 text-sm text-ink-900 transition-colors',
-          'placeholder:text-ink-400',
-          'disabled:cursor-not-allowed disabled:bg-ink-50 disabled:text-ink-500',
-          hasError
-            ? 'border-danger-600 focus-visible:outline-danger-600'
-            : 'border-ink-300 hover:border-ink-400',
+      {/*
+        The icons sit in a wrapper rather than inside the input (impossible) or
+        absolutely positioned over the page (fragile). `focus-within` moves the
+        focus styling to the wrapper so the whole field reacts as one object.
+      */}
+      <div className="relative flex items-center">
+        {leadingIcon && (
+          <span
+            className="pointer-events-none absolute left-3 flex text-ink-400"
+            aria-hidden="true"
+          >
+            {leadingIcon}
+          </span>
         )}
-        {...rest}
-      />
+
+        <input
+          id={inputId}
+          ref={ref}
+          // `aria-invalid` is the programmatic half of the red border. The colour
+          // alone is invisible to a screen reader — and to a colour-blind user.
+          aria-invalid={hasError}
+          aria-describedby={describedBy}
+          className={cn(
+            'w-full rounded-control border bg-white text-sm text-ink-900',
+            'transition-[border-color,box-shadow] duration-150',
+            'placeholder:text-ink-400',
+            'disabled:cursor-not-allowed disabled:bg-ink-50 disabled:text-ink-500',
+            fieldSize === 'sm' ? 'h-10 px-3' : 'h-11 px-3.5',
+            // `Boolean(...)`, not `leadingIcon &&`: a ReactNode can legally be
+            // the number 0, and `0 && 'pl-10'` evaluates to 0 — which `cn`
+            // would then have to accept as a class name.
+            Boolean(leadingIcon) && 'pl-10',
+            Boolean(trailing) && 'pr-10',
+            hasError
+              ? 'border-danger-600 focus-visible:outline-danger-600'
+              : 'border-ink-300 hover:border-ink-400',
+          )}
+          {...rest}
+        />
+
+        {trailing && (
+          <span className="absolute right-1.5 flex items-center">{trailing}</span>
+        )}
+      </div>
 
       {hasError ? (
         /*

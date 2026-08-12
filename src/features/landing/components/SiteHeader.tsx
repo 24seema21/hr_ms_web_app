@@ -5,8 +5,8 @@ import { ButtonLink } from '@/shared/components/ui/ButtonLink'
 import { ROUTES } from '@/shared/constants/routes'
 
 const NAV_LINKS = [
-  { id: 'features', label: 'Features', href: '#features' },
-  { id: 'how-it-works', label: 'How it works', href: '#how-it-works' },
+  { id: 'modules', label: 'Modules', href: '#modules' },
+  { id: 'rollout', label: 'Rollout', href: '#rollout' },
 ] as const
 
 /**
@@ -15,7 +15,7 @@ const NAV_LINKS = [
  */
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-50 border-b border-ink-200/70 bg-white/85 backdrop-blur">
+    <header className="sticky top-0 z-50 border-b border-ink-200/80 bg-paper/85 backdrop-blur">
       <Container className="flex h-16 items-center justify-between gap-4">
         <Link to={ROUTES.HOME} aria-label="HarkHR home">
           <Logo />
@@ -27,12 +27,12 @@ export function SiteHeader() {
           same links are repeated in the footer, which stays reachable.
         */}
         <nav aria-label="Main" className="hidden sm:block">
-          <ul className="flex items-center gap-8">
+          <ul className="flex items-center gap-1">
             {NAV_LINKS.map((link) => (
               <li key={link.id}>
                 <a
                   href={link.href}
-                  className="text-sm font-medium text-ink-600 transition-colors hover:text-ink-900"
+                  className="rounded-control px-3 py-2 text-sm font-medium text-ink-600 transition-colors hover:bg-ink-100 hover:text-ink-900"
                 >
                   {link.label}
                 </a>

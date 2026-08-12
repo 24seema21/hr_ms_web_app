@@ -6,31 +6,55 @@ export function CtaBanner() {
   return (
     <section aria-labelledby="cta-heading" className="py-20 sm:py-24">
       <Container>
-        <div className="rounded-card bg-brand-700 px-6 py-14 text-center sm:px-14">
-          <h2
-            id="cta-heading"
-            className="text-3xl font-bold tracking-tight text-balance text-white sm:text-4xl"
-          >
-            Give your HR team its afternoons back
-          </h2>
-          <p className="mx-auto mt-4 max-w-xl text-lg text-pretty text-brand-100">
-            Sign in to your workspace, or use the demo credentials on the login
-            page to look around first.
-          </p>
-          <div className="mt-9 flex flex-col justify-center gap-3 sm:flex-row">
-            <ButtonLink to={ROUTES.LOGIN} variant="inverse" size="lg">
-              Sign in
-            </ButtonLink>
-            <ButtonLink
-              to="#features"
-              size="lg"
-              // A transparent button on a coloured band: the border carries the
-              // shape. Passed as `className` rather than becoming a fifth
-              // variant, because it is used exactly once.
-              className="border border-brand-400 bg-transparent text-white hover:bg-brand-600"
+        <div className="relative overflow-hidden rounded-panel bg-brand-900 px-6 py-16 sm:px-14">
+          {/*
+            The register ruling again, this time inverted for the dark panel —
+            the `register-rules` utility draws in ink-200, which would be
+            invisible here. Same rhythm, same idea, one page apart: that
+            repetition is what makes a motif rather than an effect.
+          */}
+          <div
+            className="pointer-events-none absolute inset-0 opacity-[0.18]"
+            aria-hidden="true"
+            style={{
+              backgroundImage:
+                'linear-gradient(to right, var(--color-brand-400) 1px, transparent 1px), linear-gradient(to bottom, var(--color-brand-400) 1px, transparent 1px)',
+              backgroundSize: '3.5rem 3.5rem',
+              maskImage:
+                'radial-gradient(ellipse 80% 70% at 50% 0%, black, transparent)',
+            }}
+          />
+
+          <div className="relative mx-auto max-w-2xl text-center">
+            <p className="type-label text-accent-300">Ready when you are</p>
+
+            <h2
+              id="cta-heading"
+              className="type-wide mt-4 text-3xl font-bold tracking-tight text-balance text-white sm:text-4xl"
             >
-              See what is included
-            </ButtonLink>
+              Give your HR team its afternoons back
+            </h2>
+
+            <p className="mx-auto mt-5 max-w-xl text-lg text-pretty text-brand-100">
+              Sign in to your workspace and start with the directory — the one
+              record everything else is built on.
+            </p>
+
+            <div className="mt-9 flex flex-col justify-center gap-3 sm:flex-row">
+              <ButtonLink to={ROUTES.LOGIN} variant="accent" size="lg">
+                Sign in to HarkHR
+              </ButtonLink>
+              <ButtonLink
+                to="#modules"
+                size="lg"
+                // A transparent button on a coloured band: the border carries
+                // the shape. Passed as `className` rather than becoming a
+                // seventh variant, because it is used exactly once.
+                className="border border-brand-600 bg-transparent text-white hover:bg-brand-800"
+              >
+                Review the modules
+              </ButtonLink>
+            </div>
           </div>
         </div>
       </Container>

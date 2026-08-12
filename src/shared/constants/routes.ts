@@ -12,6 +12,8 @@ export const ROUTES = {
   HOME: '/',
   LOGIN: '/login',
   DASHBOARD: '/dashboard',
+  EMPLOYEES: '/employees',
+  ATTENDANCE: '/attendance',
 } as const
 
 /**

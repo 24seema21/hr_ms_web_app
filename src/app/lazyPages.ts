@@ -36,3 +36,15 @@ export const DashboardPage = lazy(() =>
     default: m.DashboardPage,
   })),
 )
+
+export const EmployeesPage = lazy(() =>
+  import('@/features/employees/pages/EmployeesPage').then((m) => ({
+    default: m.EmployeesPage,
+  })),
+)
+
+export const AttendancePage = lazy(() =>
+  import('@/features/attendance/pages/AttendancePage').then((m) => ({
+    default: m.AttendancePage,
+  })),
+)

@@ -62,7 +62,7 @@ test('full landing → login → dashboard → logout flow', async () => {
   // 1. Landing page renders.
   expect(
     await screen.findByRole('heading', {
-      name: /run your whole hr team/i,
+      name: /register every HR module writes in/i,
       level: 1,
     }),
   ).toBeInTheDocument()
@@ -128,7 +128,7 @@ test('full landing → login → dashboard → logout flow', async () => {
   expect(
     await screen.findByRole(
       'heading',
-      { name: /run your whole hr team/i, level: 1 },
+      { name: /register every HR module writes in/i, level: 1 },
       LONG,
     ),
   ).toBeInTheDocument()

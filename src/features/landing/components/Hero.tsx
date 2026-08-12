@@ -1,66 +1,72 @@
 import { Container } from '@/shared/components/layout/Container'
 import { ButtonLink } from '@/shared/components/ui/ButtonLink'
 import { ROUTES } from '@/shared/constants/routes'
-
-const STATS = [
-  { id: 'teams', value: '1,200+', label: 'teams onboarded' },
-  { id: 'accuracy', value: '99.9%', label: 'payroll accuracy' },
-  { id: 'setup', value: '15 min', label: 'to first payslip' },
-] as const
+import { RosterGrid } from './RosterGrid'
 
 export function Hero() {
   return (
-    <section className="bg-linear-to-b from-brand-50 to-white py-20 sm:py-28">
-      <Container>
-        {/*
-          The one and only <h1> on this page. A page with several <h1>s (or
-          none) leaves screen-reader users without a reliable "what is this
-          page?" anchor, and search engines guessing.
-        */}
-        <div className="max-w-2xl">
-          <p className="mb-4 inline-flex rounded-full bg-brand-100 px-3 py-1 text-xs font-semibold tracking-wide text-brand-700 uppercase">
-            HR, payroll & people ops
-          </p>
+    <section className="relative overflow-hidden border-b border-ink-200 bg-paper">
+      {/*
+        The ruled ground of a register page, behind everything and faded out
+        before it reaches the content. Purely decorative, so it is hidden from
+        the accessibility tree and sits at a z-index below the text.
+      */}
+      <div
+        className="register-rules pointer-events-none absolute inset-0 opacity-60"
+        aria-hidden="true"
+      />
 
-          <h1 className="text-4xl font-bold tracking-tight text-balance text-ink-900 sm:text-5xl lg:text-6xl">
-            Run your whole HR team from one place
-          </h1>
+      <Container className="relative py-14 sm:py-20 lg:py-24">
+        <div className="grid items-center gap-12 lg:grid-cols-12 lg:gap-12">
+          <div className="lg:col-span-5">
+            <p className="type-label inline-flex items-center gap-2 rounded-full border border-brand-200 bg-brand-50 px-3 py-1.5 text-brand-700">
+              <span className="h-1.5 w-1.5 rounded-full bg-accent-400" />
+              HR · payroll · people ops
+            </p>
 
-          <p className="mt-6 text-lg text-pretty text-ink-600">
-            HarkHR replaces the spreadsheets, the email approvals and the
-            end-of-month payroll scramble with a single system your people
-            actually enjoy using.
-          </p>
+            {/*
+              The one and only <h1> on this page. A page with several <h1>s (or
+              none) leaves screen-reader users without a reliable "what is this
+              page?" anchor, and search engines guessing.
+            */}
+            <h1 className="type-wide mt-6 text-hero font-bold text-balance text-ink-900">
+              The register every HR module writes in
+            </h1>
+
+            <p className="mt-6 max-w-lg text-lg text-pretty text-ink-600">
+              Directory, attendance, leave and payroll all read the same
+              employee record. Approve one leave request and the timesheet, the
+              balance and next month's payslip already agree.
+            </p>
+
+            {/*
+              `flex-col` first, `sm:flex-row` after — mobile-first. We describe
+              the small screen as the default and only add complexity as the
+              viewport grows, which is why nothing overflows at 375px.
+            */}
+            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+              <ButtonLink to={ROUTES.LOGIN} size="lg">
+                Sign in to your workspace
+              </ButtonLink>
+              <ButtonLink to="#modules" variant="secondary" size="lg">
+                See the six modules
+              </ButtonLink>
+            </div>
+
+            <p className="mt-6 font-mono text-xs text-ink-500">
+              One record per person · no re-keying between modules
+            </p>
+          </div>
 
           {/*
-            `flex-col` first, `sm:flex-row` after — mobile-first. We describe
-            the small screen as the default and only add complexity as the
-            viewport grows, which is why nothing overflows at 375px.
+            The signature element gets the larger half of the grid and sits
+            beside the copy on desktop, under it on mobile — where a fortnight
+            of marks still reads as a register, just a narrower one.
           */}
-          <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-            <ButtonLink to={ROUTES.LOGIN} size="lg">
-              Sign in to your workspace
-            </ButtonLink>
-            <ButtonLink to="#features" variant="secondary" size="lg">
-              Explore the modules
-            </ButtonLink>
+          <div className="lg:col-span-7">
+            <RosterGrid />
           </div>
         </div>
-
-        <dl className="mt-16 grid grid-cols-1 gap-8 border-t border-ink-200 pt-10 sm:grid-cols-3">
-          {STATS.map((stat) => (
-            /*
-              <dl>/<dt>/<dd> is a description list: each value is genuinely
-              *described by* its label, and the markup says so.
-            */
-            <div key={stat.id}>
-              <dt className="order-2 text-sm text-ink-500">{stat.label}</dt>
-              <dd className="text-3xl font-semibold text-ink-900">
-                {stat.value}
-              </dd>
-            </div>
-          ))}
-        </dl>
       </Container>
     </section>
   )

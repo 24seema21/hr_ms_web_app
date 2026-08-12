@@ -1,6 +1,9 @@
 @import "tailwindcss";
 
 /*
+  ─────────────────────────────────────────────────────────────────────────────
+  THE DESIGN SYSTEM
+  ─────────────────────────────────────────────────────────────────────────────
   Tailwind v4 is configured in CSS, not in a `tailwind.config.js`.
 
   Every custom property declared inside `@theme` becomes a real Tailwind
@@ -10,49 +13,209 @@
 
   Practical payoff: rebranding the entire product later is an edit to this
   one block, not a find-and-replace across a hundred components.
+
+  ── The direction, and why ───────────────────────────────────────────────────
+  HR ops has a physical artifact older than any of this software: the muster
+  roll — names down the side, days across the top, a mark in every cell. That
+  register is where the product's visual language comes from. Ink green for the
+  ruling, marigold for the marks, paper for the ground, and a monospace face
+  for anything that would have been written into a column by hand.
+
+  It is deliberately not the indigo-on-white palette every HR SaaS ships with:
+  those products all look like each other, and none of them look like the work.
+  ─────────────────────────────────────────────────────────────────────────────
 */
 @theme {
-  /* Brand — indigo. Used for primary actions, links and accents. */
-  --color-brand-50: #eef2ff;
-  --color-brand-100: #e0e7ff;
-  --color-brand-200: #c7d2fe;
-  --color-brand-300: #a5b4fc;
-  --color-brand-400: #818cf8;
-  --color-brand-500: #6366f1;
-  --color-brand-600: #4f46e5;
-  --color-brand-700: #4338ca;
-  --color-brand-800: #3730a3;
-  --color-brand-900: #312e81;
-  --color-brand-950: #1e1b4b;
+  /*
+    Brand — ink green, the colour of the ruling on a register page.
+    Primary actions, links, the signed-in chrome.
+    600 on white is 7.2:1, so it carries body-size text as well as buttons.
+  */
+  --color-brand-50: #eef5f2;
+  --color-brand-100: #d8eae3;
+  --color-brand-200: #b2d5c8;
+  --color-brand-300: #82b9a6;
+  --color-brand-400: #4f9982;
+  --color-brand-500: #2a7c65;
+  --color-brand-600: #146152;
+  --color-brand-700: #0f4e42;
+  --color-brand-800: #0d3e36;
+  --color-brand-900: #0b2f2a;
+  --color-brand-950: #071b18;
 
-  /* Ink — the neutral ramp for text, borders and page chrome. */
-  --color-ink-50: #f8fafc;
-  --color-ink-100: #f1f5f9;
-  --color-ink-200: #e2e8f0;
-  --color-ink-300: #cbd5e1;
-  --color-ink-400: #94a3b8;
-  --color-ink-500: #64748b;
-  --color-ink-600: #475569;
-  --color-ink-700: #334155;
-  --color-ink-800: #1e293b;
-  --color-ink-900: #0f172a;
-  --color-ink-950: #020617;
+  /*
+    Accent — marigold, the mark in the cell.
 
-  /* Feedback colours — validation errors, success states. */
-  --color-danger-50: #fef2f2;
-  --color-danger-200: #fecaca;
-  --color-danger-600: #dc2626;
-  --color-danger-700: #b91c1c;
-  --color-success-50: #f0fdf4;
-  --color-success-600: #16a34a;
+    Used for attention, never for meaning on its own: at body size on paper it
+    is around 2:1, which is why it appears as a fill, an underline or a glyph
+    with dark text on top, and never as small text on a light ground.
+  */
+  --color-accent-50: #fdf6e9;
+  --color-accent-100: #fae9c7;
+  --color-accent-200: #f5d394;
+  --color-accent-300: #efbb5f;
+  --color-accent-400: #e9a33b;
+  --color-accent-500: #d6871f;
+  --color-accent-600: #b36a16;
+  --color-accent-700: #8c5113;
 
-  /* Typography */
-  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+  /*
+    Ink — the neutral ramp for text, borders and chrome. Warmed a few degrees
+    towards green so it sits with the brand instead of fighting it; a pure
+    blue-grey next to this green reads as two different products.
+  */
+  --color-ink-50: #f6f7f5;
+  --color-ink-100: #edefec;
+  --color-ink-200: #dfe2de;
+  --color-ink-300: #c4c9c4;
+  --color-ink-400: #9ba29c;
+  --color-ink-500: #767d77;
+  --color-ink-600: #5a615c;
+  --color-ink-700: #444a46;
+  --color-ink-800: #2c3230;
+  --color-ink-900: #1a1f1d;
+  --color-ink-950: #0d110f;
+
+  /*
+    Surfaces. `paper` is the public page, `shell` the signed-in workspace —
+    a workspace that is a shade darker than its cards is what makes the cards
+    read as objects sitting on a desk rather than holes cut in the page.
+  */
+  --color-paper: #fcfcfa;
+  --color-shell: #f4f5f1;
+
+  /* Feedback. Clay rather than a fire-engine red — it belongs to the same
+     earthy family as the rest, and still reads unmistakably as "careful". */
+  --color-danger-50: #fcf2ef;
+  --color-danger-100: #f9e2dc;
+  --color-danger-200: #f1c4b8;
+  --color-danger-600: #b4442f;
+  --color-danger-700: #93341f;
+  --color-success-50: #f0f6ec;
+  --color-success-200: #cbe3bf;
+  --color-success-600: #3f7d3a;
+  --color-success-700: #2f6a2c;
+
+  /*
+    ── Typography ─────────────────────────────────────────────────────────────
+    Two families, three jobs.
+
+    Archivo is a variable font with a real width axis (75–125). That single
+    file gives us the display voice — set wide, tight and heavy, it has the
+    flat-sided authority of signage and payroll stationery — and the UI voice
+    at normal width, without loading a second family or pairing two faces that
+    were never drawn for each other.
+
+    IBM Plex Mono is the hand in the register: column labels, employee ids,
+    dates, counts, the attendance marks. Anything that would have been written
+    into a ruled box gets the monospace, which is also what keeps digits from
+    dancing as a table re-sorts.
+  */
+  --font-sans: "Archivo", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
     Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-display: "Archivo", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    Roboto, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas,
+    monospace;
 
-  /* Corner radii — one scale, so cards/inputs/buttons stay visually related. */
-  --radius-card: 0.875rem;
-  --radius-control: 0.625rem;
+  /*
+    One display size the browser interpolates between the phone and the
+    desktop, so the hero never needs three breakpoint overrides.
+
+    The ceiling is 3.5rem rather than something more dramatic because the
+    headline shares the hero with the roster grid and only has five columns to
+    live in: at 4.75rem it broke into five lines and stopped being a sentence.
+  */
+  --text-hero: clamp(2.25rem, 1.5rem + 2.4vw, 3.5rem);
+  --text-hero--line-height: 1.02;
+  --text-hero--letter-spacing: -0.025em;
+
+  /* Corner radii — one scale, so cards/inputs/buttons stay visually related.
+     Softened, not squared: this is a tool people use all day, and hard corners
+     at this density read as hostile. */
+  --radius-control: 0.5rem;
+  --radius-card: 0.75rem;
+  --radius-panel: 1rem;
+
+  /*
+    Shadows in one place, tinted with the brand's own darkest ink rather than
+    black — a neutral black shadow over a warm green page looks like grime.
+  */
+  --shadow-card: 0 1px 2px 0 rgb(7 27 24 / 0.05);
+  --shadow-raised: 0 4px 16px -4px rgb(7 27 24 / 0.12),
+    0 1px 3px 0 rgb(7 27 24 / 0.06);
+  --shadow-pop: 0 24px 48px -12px rgb(7 27 24 / 0.22),
+    0 2px 8px -2px rgb(7 27 24 / 0.1);
+
+  /* A single easing curve for the whole product. Motion that all decelerates
+     the same way reads as one system; three different curves read as three
+     different people. */
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+
+  /*
+    ── Motion ─────────────────────────────────────────────────────────────────
+    Keyframes live inside `@theme` in Tailwind v4, next to the `--animate-*`
+    property that exposes them as a utility. Every one of them is switched off
+    wholesale by the reduced-motion block further down.
+  */
+  --animate-mark-in: mark-in 420ms var(--ease-out-quart) both;
+  --animate-rise-in: rise-in 560ms var(--ease-out-quart) both;
+  --animate-fade-in: fade-in 200ms var(--ease-out-quart) both;
+  --animate-slide-over: slide-over 260ms var(--ease-out-quart) both;
+  --animate-toast-in: toast-in 260ms var(--ease-out-quart) both;
+
+  @keyframes mark-in {
+    from {
+      opacity: 0;
+      transform: scale(0.55);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes rise-in {
+    from {
+      opacity: 0;
+      transform: translateY(1rem);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes slide-over {
+    from {
+      opacity: 0;
+      transform: translateX(2rem);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes toast-in {
+    from {
+      opacity: 0;
+      transform: translateY(0.75rem) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
 }
 
 /*
@@ -62,12 +225,14 @@
 */
 @layer base {
   html {
-    /* Anchor links (e.g. "#features") glide instead of jumping. */
+    /* Anchor links (e.g. "#modules") glide instead of jumping. */
     scroll-behavior: smooth;
+    /* Anchored sections stop below the sticky header instead of underneath it. */
+    scroll-padding-top: 5rem;
   }
 
   body {
-    @apply bg-white font-sans text-ink-800 antialiased;
+    @apply bg-paper font-sans text-ink-800 antialiased;
   }
 
   /*
@@ -78,4 +243,87 @@
   :focus-visible {
     @apply outline-2 outline-offset-2 outline-brand-600;
   }
+
+  /* The marigold mark, applied to selected text. Free brand consistency in a
+     place nobody usually styles. */
+  ::selection {
+    @apply bg-accent-200 text-ink-900;
+  }
+
+  /*
+    Every number in the product lines up in its column.
+
+    Proportional digits make a re-sorting table shimmer, because each row's
+    figures are a different width. This is one declaration and it fixes the
+    whole class of problem.
+  */
+  table {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /*
+    Reduced motion, honoured globally rather than animation by animation.
+
+    Someone who has asked their OS for less movement has usually asked because
+    movement makes them ill, so the honest response is to switch it off
+    everywhere — including animations added next month by someone who never
+    read this file.
+  */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/*
+  ─────────────────────────────────────────────────────────────────────────────
+  Custom utilities
+  ─────────────────────────────────────────────────────────────────────────────
+  `@utility` registers these with Tailwind properly, so they compose with
+  variants (`sm:`, `hover:`) and get sorted into the right layer. A plain
+  `.class` in a stylesheet would do neither.
+*/
+
+/**
+ * The display voice: Archivo pushed out along its width axis.
+ *
+ * A width axis is not the same as letter-spacing — the letterforms themselves
+ * get broader rather than the gaps between them, which is what stops big
+ * headings looking like tracked-out body text.
+ */
+@utility type-wide {
+  font-variation-settings: "wdth" 112;
+}
+
+/** The label voice: mono, small, spaced, upper. Column headers and eyebrows. */
+@utility type-label {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/**
+ * The ruled ground of a register page.
+ *
+ * Hairlines at the same rhythm as the roster grid, faded out towards the
+ * bottom so content sits on paper rather than inside a cage. Decorative only —
+ * always behind `aria-hidden` scaffolding or as a background.
+ */
+@utility register-rules {
+  background-image:
+    linear-gradient(to right, var(--color-ink-200) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--color-ink-200) 1px, transparent 1px);
+  background-size: 3.5rem 3.5rem;
+  mask-image: linear-gradient(to bottom, black, transparent 85%);
 }

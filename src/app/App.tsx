@@ -1,6 +1,7 @@
 import { Suspense } from 'react'
 import { RouterProvider } from 'react-router'
 import { AuthProvider } from '@/features/auth/context/AuthProvider'
+import { ThemeProvider } from '@/shared/context/ThemeProvider'
 import { Spinner } from '@/shared/components/ui/Spinner'
 import { router } from './routes'
 
@@ -30,15 +31,24 @@ function PageFallback() {
  */
 export function App() {
   return (
-    <AuthProvider>
-      {/*
-        One Suspense boundary for the whole router. React pauses rendering
-        while a lazy page chunk downloads, and shows this fallback meanwhile
-        instead of a blank screen.
-      */}
-      <Suspense fallback={<PageFallback />}>
-        <RouterProvider router={router} />
-      </Suspense>
-    </AuthProvider>
+    /*
+      ThemeProvider outermost: the theme applies to the public pages, the login
+      screen and the signed-in shell alike, and it must survive both navigation
+      and signing out. Nesting it inside AuthProvider would also work today,
+      but it would tie the appearance of the app to the lifetime of a session —
+      and logging out should not put somebody back into the light theme.
+    */
+    <ThemeProvider>
+      <AuthProvider>
+        {/*
+          One Suspense boundary for the whole router. React pauses rendering
+          while a lazy page chunk downloads, and shows this fallback meanwhile
+          instead of a blank screen.
+        */}
+        <Suspense fallback={<PageFallback />}>
+          <RouterProvider router={router} />
+        </Suspense>
+      </AuthProvider>
+    </ThemeProvider>
   )
 }

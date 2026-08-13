@@ -311,3 +311,54 @@ export function LogInIcon({ className }: IconProps) {
     </Glyph>
   )
 }
+
+/** Light theme. The rays are one path so the stroke joins stay consistent. */
+export function SunIcon({ className }: IconProps) {
+  return (
+    <Glyph className={className}>
+      <circle cx="12" cy="12" r="4" />
+      <path d="M12 2.5v2M12 19.5v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M2.5 12h2M19.5 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4" />
+    </Glyph>
+  )
+}
+
+/**
+ * Dark theme. A crescent cut as a single filled path rather than two
+ * overlapping circles — an outline moon at 20px reads as a comma.
+ */
+export function MoonIcon({ className }: IconProps) {
+  return (
+    <Glyph className={className} filled>
+      <path d="M20.5 14.6A8.6 8.6 0 0 1 9.4 3.5a8.6 8.6 0 1 0 11.1 11.1Z" />
+    </Glyph>
+  )
+}
+
+export function PaperclipIcon({ className }: IconProps) {
+  return (
+    <Glyph className={className}>
+      <path d="M19 11.5 12.5 18a4.6 4.6 0 0 1-6.5-6.5l7-7a3.1 3.1 0 0 1 4.4 4.4l-7 7a1.6 1.6 0 0 1-2.2-2.2l6.3-6.3" />
+    </Glyph>
+  )
+}
+
+export function UploadIcon({ className }: IconProps) {
+  return (
+    <Glyph className={className}>
+      <path d="M4 15.5v3a1.5 1.5 0 0 0 1.5 1.5h13a1.5 1.5 0 0 0 1.5-1.5v-3" />
+      <path d="M12 4v11" />
+      <path d="m8 8 4-4 4 4" />
+    </Glyph>
+  )
+}
+
+/** The week-grid view toggle: a calendar reduced to its cells. */
+export function GridIcon({ className }: IconProps) {
+  return (
+    <Glyph className={className}>
+      <rect x="3.5" y="4.5" width="17" height="15" rx="1.5" />
+      <path d="M3.5 9.5h17" />
+      <path d="M9 9.5v10M15 9.5v10" />
+    </Glyph>
+  )
+}

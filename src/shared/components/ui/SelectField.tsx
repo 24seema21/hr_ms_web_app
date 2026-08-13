@@ -67,7 +67,7 @@ export function SelectField({
           aria-invalid={hasError}
           aria-describedby={hasError ? errorId : undefined}
           className={cn(
-            'w-full cursor-pointer appearance-none rounded-control border bg-white pr-9 text-sm text-ink-900',
+            'w-full cursor-pointer appearance-none rounded-control border bg-surface pr-9 text-sm text-ink-900',
             'transition-[border-color,box-shadow] duration-150',
             'disabled:cursor-not-allowed disabled:bg-ink-50 disabled:text-ink-500',
             fieldSize === 'sm' ? 'h-10 pl-3' : 'h-11 pl-3.5',

@@ -76,7 +76,7 @@ export function EmployeeDetailDrawer({
       */}
       <div className="flex items-center gap-4">
         <span
-          className="type-label flex h-14 w-14 shrink-0 items-center justify-center rounded-card bg-brand-900 text-base text-accent-300"
+          className="type-label flex h-14 w-14 shrink-0 items-center justify-center rounded-card bg-panel text-base text-panel-mark"
           aria-hidden="true"
         >
           {initialsOf(employee)}

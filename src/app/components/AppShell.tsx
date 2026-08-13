@@ -4,6 +4,7 @@ import { Button } from '@/shared/components/ui/Button'
 import { IconButton } from '@/shared/components/ui/IconButton'
 import { Logo } from '@/shared/components/ui/Logo'
 import { Skeleton } from '@/shared/components/ui/Skeleton'
+import { ThemeToggle } from '@/shared/components/ui/ThemeToggle'
 import {
   CalendarIcon,
   ClockIcon,
@@ -32,6 +33,7 @@ const NAV_ITEMS = [
   { to: ROUTES.DASHBOARD, label: 'Dashboard', icon: GaugeIcon },
   { to: ROUTES.EMPLOYEES, label: 'Employees', icon: UsersIcon },
   { to: ROUTES.ATTENDANCE, label: 'Attendance', icon: ClockIcon },
+  { to: ROUTES.LEAVE, label: 'Leave', icon: CalendarIcon },
 ] as const
 
 /*
@@ -45,7 +47,6 @@ const NAV_ITEMS = [
   thing.
 */
 const PLANNED_ITEMS = [
-  { id: 'leave', label: 'Leave', icon: CalendarIcon },
   { id: 'payroll', label: 'Payroll', icon: WalletIcon },
 ] as const
 
@@ -154,13 +155,13 @@ export function AppShell() {
     <div className="min-h-dvh bg-shell lg:grid lg:grid-cols-[16rem_1fr]">
       <a
         href="#workspace"
-        className="sr-only rounded-control bg-brand-600 px-4 py-2 text-sm font-medium text-white focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-60"
+        className="sr-only rounded-control bg-brand-600 px-4 py-2 text-sm font-medium text-on-brand focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-60"
       >
         Skip to content
       </a>
 
       {/* ── Sidebar (desktop) ──────────────────────────────────────────── */}
-      <div className="hidden border-r border-ink-200 bg-white lg:flex lg:h-dvh lg:flex-col lg:sticky lg:top-0">
+      <div className="hidden border-r border-ink-200 bg-surface lg:flex lg:h-dvh lg:flex-col lg:sticky lg:top-0">
         <div className="flex h-16 items-center px-5">
           <NavLink to={ROUTES.DASHBOARD} aria-label="HarkHR dashboard">
             <Logo />
@@ -180,7 +181,7 @@ export function AppShell() {
         <div className="border-t border-ink-200 p-3">
           <div className="flex items-center gap-3 rounded-control px-2 py-2">
             <span
-              className="type-label flex h-9 w-9 shrink-0 items-center justify-center rounded-control bg-brand-900 text-accent-300"
+              className="type-label flex h-9 w-9 shrink-0 items-center justify-center rounded-control bg-panel text-panel-mark"
               aria-hidden="true"
             >
               {initialsOf(user?.name)}
@@ -199,7 +200,7 @@ export function AppShell() {
 
       {/* ── Content column ─────────────────────────────────────────────── */}
       <div className="flex min-h-dvh flex-col">
-        <header className="sticky top-0 z-40 border-b border-ink-200 bg-white/90 backdrop-blur">
+        <header className="sticky top-0 z-40 border-b border-ink-200 bg-surface/90 backdrop-blur">
           <div className="flex h-16 items-center justify-between gap-3 px-4 sm:px-6">
             <div className="flex items-center gap-3">
               {/*
@@ -227,12 +228,22 @@ export function AppShell() {
               </span>
             </div>
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 sm:gap-3">
               {/* Hidden on small screens: the sign-out button earns the width
                   first, and the same address is in the sidebar. */}
               <span className="hidden text-sm text-ink-600 sm:inline">
                 {user?.email}
               </span>
+
+              {/*
+                Top right, beside sign-out — the corner people already look in
+                for account-level switches, and the one place in the chrome
+                that is on screen for every signed-in page. It keeps its width
+                on a phone: an icon-only control is cheap, and the theme is
+                more likely to be changed on a phone at night, not less.
+              */}
+              <ThemeToggle />
+
               <Button variant="secondary" size="sm" onClick={handleLogout}>
                 <LogOutIcon className="h-4 w-4" />
                 Log out

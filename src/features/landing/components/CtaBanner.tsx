@@ -6,7 +6,7 @@ export function CtaBanner() {
   return (
     <section aria-labelledby="cta-heading" className="py-20 sm:py-24">
       <Container>
-        <div className="relative overflow-hidden rounded-panel bg-brand-900 px-6 py-16 sm:px-14">
+        <div className="relative overflow-hidden rounded-panel bg-panel px-6 py-16 sm:px-14">
           {/*
             The register ruling again, this time inverted for the dark panel —
             the `register-rules` utility draws in ink-200, which would be
@@ -18,7 +18,7 @@ export function CtaBanner() {
             aria-hidden="true"
             style={{
               backgroundImage:
-                'linear-gradient(to right, var(--color-brand-400) 1px, transparent 1px), linear-gradient(to bottom, var(--color-brand-400) 1px, transparent 1px)',
+                'linear-gradient(to right, var(--color-panel-rule) 1px, transparent 1px), linear-gradient(to bottom, var(--color-panel-rule) 1px, transparent 1px)',
               backgroundSize: '3.5rem 3.5rem',
               maskImage:
                 'radial-gradient(ellipse 80% 70% at 50% 0%, black, transparent)',
@@ -26,7 +26,7 @@ export function CtaBanner() {
           />
 
           <div className="relative mx-auto max-w-2xl text-center">
-            <p className="type-label text-accent-300">Ready when you are</p>
+            <p className="type-label text-panel-mark">Ready when you are</p>
 
             <h2
               id="cta-heading"
@@ -35,7 +35,7 @@ export function CtaBanner() {
               Give your HR team its afternoons back
             </h2>
 
-            <p className="mx-auto mt-5 max-w-xl text-lg text-pretty text-brand-100">
+            <p className="mx-auto mt-5 max-w-xl text-lg text-pretty text-panel-muted">
               Sign in to your workspace and start with the directory — the one
               record everything else is built on.
             </p>
@@ -50,7 +50,7 @@ export function CtaBanner() {
                 // A transparent button on a coloured band: the border carries
                 // the shape. Passed as `className` rather than becoming a
                 // seventh variant, because it is used exactly once.
-                className="border border-brand-600 bg-transparent text-white hover:bg-brand-800"
+                className="border border-panel-line bg-transparent text-white hover:bg-panel-hover"
               >
                 Review the modules
               </ButtonLink>

@@ -2,6 +2,7 @@ import { Link } from 'react-router'
 import { Container } from '@/shared/components/layout/Container'
 import { Logo } from '@/shared/components/ui/Logo'
 import { ButtonLink } from '@/shared/components/ui/ButtonLink'
+import { ThemeToggle } from '@/shared/components/ui/ThemeToggle'
 import { ROUTES } from '@/shared/constants/routes'
 
 const NAV_LINKS = [
@@ -41,10 +42,16 @@ export function SiteHeader() {
           </ul>
         </nav>
 
-        {/* Navigation, so a real <a> that merely looks like a button. */}
-        <ButtonLink to={ROUTES.LOGIN} size="sm">
-          Sign in
-        </ButtonLink>
+        <div className="flex items-center gap-2">
+          {/* The same corner as the signed-in shell, so the control does not
+              move when somebody signs in. */}
+          <ThemeToggle />
+
+          {/* Navigation, so a real <a> that merely looks like a button. */}
+          <ButtonLink to={ROUTES.LOGIN} size="sm">
+            Sign in
+          </ButtonLink>
+        </div>
       </Container>
     </header>
   )

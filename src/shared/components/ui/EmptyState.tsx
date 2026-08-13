@@ -38,8 +38,8 @@ export function EmptyState({
       className={cn(
         'flex flex-col items-center rounded-card px-6 py-14 text-center',
         variant === 'dashed'
-          ? 'border border-dashed border-ink-300 bg-white'
-          : 'border border-ink-200 bg-white',
+          ? 'border border-dashed border-ink-300 bg-surface'
+          : 'border border-ink-200 bg-surface',
         className,
       )}
     >

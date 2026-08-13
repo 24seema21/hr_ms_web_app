@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router'
+import { ThemeProvider } from '@/shared/context/ThemeProvider'
 import { FEATURES } from '../data/features'
 import { LandingPage } from './LandingPage'
 
@@ -13,11 +14,19 @@ import { LandingPage } from './LandingPage'
   are actually contracts: the page renders, it has one top-level heading, the
   sign-in route is correct, and every module is listed.
 */
+/*
+  ThemeProvider is part of the page's environment, not an implementation
+  detail: the header carries the theme toggle, and `useTheme` throws rather
+  than guessing when there is no provider above it. Rendering the page without
+  one tests a tree the app never actually builds.
+*/
 function renderLandingPage() {
   return render(
-    <MemoryRouter>
-      <LandingPage />
-    </MemoryRouter>,
+    <ThemeProvider>
+      <MemoryRouter>
+        <LandingPage />
+      </MemoryRouter>
+    </ThemeProvider>,
   )
 }
 

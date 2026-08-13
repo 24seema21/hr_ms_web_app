@@ -7,6 +7,7 @@ import {
   DashboardPage,
   EmployeesPage,
   LandingPage,
+  LeavePage,
   LoginPage,
 } from './lazyPages'
 
@@ -42,6 +43,7 @@ export const router = createBrowserRouter([
           { path: ROUTES.DASHBOARD, element: <DashboardPage /> },
           { path: ROUTES.EMPLOYEES, element: <EmployeesPage /> },
           { path: ROUTES.ATTENDANCE, element: <AttendancePage /> },
+          { path: ROUTES.LEAVE, element: <LeavePage /> },
         ],
       },
     ],

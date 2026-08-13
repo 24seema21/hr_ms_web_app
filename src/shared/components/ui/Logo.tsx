@@ -29,10 +29,10 @@ export function Logo({ className, markOnly = false, tone = 'dark' }: LogoProps) 
         aria-hidden="true"
         fill="none"
       >
-        <rect width="32" height="32" rx="8" className="fill-brand-900" />
+        <rect width="32" height="32" rx="8" className="fill-panel" />
         <path
           d="M10 8.5v15M22 8.5v15"
-          className="stroke-brand-400"
+          className="stroke-panel-rule"
           strokeWidth="2"
           strokeLinecap="round"
         />
@@ -47,7 +47,7 @@ export function Logo({ className, markOnly = false, tone = 'dark' }: LogoProps) 
           )}
         >
           Hark
-          <span className={tone === 'light' ? 'text-accent-300' : 'text-brand-600'}>
+          <span className={tone === 'light' ? 'text-panel-mark' : 'text-brand-600'}>
             HR
           </span>
         </span>

@@ -67,7 +67,7 @@ export function AttendanceModePicker({
               className={cn(
                 'relative flex cursor-pointer items-center gap-1.5 rounded-[0.375rem] px-2.5 py-1 text-xs font-medium transition-colors',
                 isSelected
-                  ? 'bg-white text-ink-900 shadow-card'
+                  ? 'bg-surface text-ink-900 shadow-card'
                   : 'text-ink-500 hover:text-ink-800',
                 disabled && 'cursor-not-allowed',
               )}

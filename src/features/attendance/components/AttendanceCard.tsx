@@ -97,7 +97,7 @@ export function AttendanceCardView({
   return (
     <section
       aria-labelledby="attendance-heading"
-      className="overflow-hidden rounded-card border border-ink-200 bg-white shadow-card"
+      className="overflow-hidden rounded-card border border-ink-200 bg-surface shadow-card"
     >
       {/* ── Date + mode ────────────────────────────────────────────────── */}
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-ink-200 bg-ink-50/60 px-4 py-3 sm:px-5">
@@ -319,7 +319,7 @@ export function AttendanceCard() {
 function AttendanceCardSkeleton() {
   return (
     <section
-      className="overflow-hidden rounded-card border border-ink-200 bg-white shadow-card"
+      className="overflow-hidden rounded-card border border-ink-200 bg-surface shadow-card"
       aria-busy="true"
     >
       <span className="sr-only" role="status">

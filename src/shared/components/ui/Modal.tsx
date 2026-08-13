@@ -84,7 +84,7 @@ export function Modal({
         Escape is the keyboard equivalent of clicking it.
       */}
       <div
-        className="animate-fade-in fixed inset-0 bg-brand-950/45 backdrop-blur-[2px]"
+        className="animate-fade-in fixed inset-0 bg-scrim backdrop-blur-[2px]"
         aria-hidden="true"
         onClick={onClose}
       />
@@ -100,7 +100,7 @@ export function Modal({
         tabIndex={-1}
         className={cn(
           'animate-rise-in relative z-10 my-auto flex w-full max-w-lg flex-col',
-          'max-h-[calc(100dvh-2rem)] overflow-hidden rounded-panel border border-ink-200 bg-white shadow-pop',
+          'max-h-[calc(100dvh-2rem)] overflow-hidden rounded-panel border border-ink-200 bg-surface shadow-pop',
           className,
         )}
       >

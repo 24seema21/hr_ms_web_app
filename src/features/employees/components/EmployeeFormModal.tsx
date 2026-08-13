@@ -311,7 +311,7 @@ export function EmployeeFormModal({
           bottom and leaves a strip of scrolling form fields sliding past
           underneath it.
         */}
-        <div className="sticky bottom-0 -mx-6 mt-8 flex flex-col-reverse gap-3 border-t border-ink-200 bg-white px-6 py-4 sm:flex-row sm:justify-end">
+        <div className="sticky bottom-0 -mx-6 mt-8 flex flex-col-reverse gap-3 border-t border-ink-200 bg-surface px-6 py-4 sm:flex-row sm:justify-end">
           <Button
             variant="secondary"
             onClick={handleClose}

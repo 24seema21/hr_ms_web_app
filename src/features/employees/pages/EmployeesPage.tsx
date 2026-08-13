@@ -148,7 +148,7 @@ export function EmployeesPage() {
       </div>
 
       {/* ── The directory ──────────────────────────────────────────────── */}
-      <div className="mt-6 overflow-hidden rounded-card border border-ink-200 bg-white shadow-card">
+      <div className="mt-6 overflow-hidden rounded-card border border-ink-200 bg-surface shadow-card">
         {/*
           The toolbar stays mounted through every state below it — including
           the error and the empty states. Taking the search box away the moment

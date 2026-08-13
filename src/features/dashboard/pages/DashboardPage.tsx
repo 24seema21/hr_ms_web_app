@@ -97,7 +97,7 @@ export function DashboardPage() {
         {MODULES.map((module) => (
           <li
             key={module.id}
-            className="flex flex-col rounded-card border border-ink-200 bg-white p-6 shadow-card"
+            className="flex flex-col rounded-card border border-ink-200 bg-surface p-6 shadow-card"
           >
             <span className="flex h-10 w-10 items-center justify-center rounded-control bg-brand-50 text-brand-600">
               <module.icon className="h-5 w-5" />

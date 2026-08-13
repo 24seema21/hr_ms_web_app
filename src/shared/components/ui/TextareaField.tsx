@@ -43,7 +43,7 @@ export function TextareaField({
         aria-invalid={hasError}
         aria-describedby={describedBy}
         className={cn(
-          'w-full rounded-control border bg-white px-3.5 py-2.5 text-sm text-ink-900',
+          'w-full rounded-control border bg-surface px-3.5 py-2.5 text-sm text-ink-900',
           'transition-[border-color] duration-150 placeholder:text-ink-400',
           // Vertical only: a textarea that can be dragged wider breaks the
           // dialog's layout, and nobody has ever wanted that handle.

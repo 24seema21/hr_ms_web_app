@@ -54,7 +54,7 @@ export function ModuleIndex() {
               rendered as information rather than illustrated with an arrow
               diagram nobody can read on a phone.
             */}
-            <div className="mt-8 rounded-card border border-ink-200 bg-white p-5 shadow-card">
+            <div className="mt-8 rounded-card border border-ink-200 bg-surface p-5 shadow-card">
               <p className="type-label text-ink-400">employee record</p>
               <ul className="mt-3 flex flex-wrap gap-1.5">
                 {SHARED_RECORD.map((field) => (
@@ -89,7 +89,7 @@ export function ModuleIndex() {
                   key={feature.id}
                   className="group flex gap-4 border-t border-ink-200 py-6 first:border-t-0 first:pt-0 sm:gap-5"
                 >
-                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-card border border-ink-200 bg-white text-brand-600 shadow-card transition-colors duration-200 group-hover:border-brand-200 group-hover:bg-brand-50">
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-card border border-ink-200 bg-surface text-brand-600 shadow-card transition-colors duration-200 group-hover:border-brand-200 group-hover:bg-brand-50">
                     <Icon className="h-5 w-5" />
                   </span>
 

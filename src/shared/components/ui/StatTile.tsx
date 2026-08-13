@@ -34,7 +34,7 @@ export function StatTile({
   tone = 'neutral',
 }: StatTileProps) {
   return (
-    <div className="rounded-card border border-ink-200 bg-white p-4 shadow-card sm:p-5">
+    <div className="rounded-card border border-ink-200 bg-surface p-4 shadow-card sm:p-5">
       <div className="flex items-center justify-between gap-3">
         <p className="type-label text-ink-500">{label}</p>
         {icon && (

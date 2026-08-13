@@ -105,7 +105,7 @@ export function TextField({
           aria-invalid={hasError}
           aria-describedby={describedBy}
           className={cn(
-            'w-full rounded-control border bg-white text-sm text-ink-900',
+            'w-full rounded-control border bg-surface text-sm text-ink-900',
             'transition-[border-color,box-shadow] duration-150',
             'placeholder:text-ink-400',
             'disabled:cursor-not-allowed disabled:bg-ink-50 disabled:text-ink-500',

@@ -33,7 +33,7 @@ export function LoginPage() {
     */
     <div className="grid min-h-dvh lg:grid-cols-2">
       {/* ── Brand panel ─────────────────────────────────────────────── */}
-      <section className="relative flex flex-col justify-between gap-12 overflow-hidden bg-brand-900 px-6 py-10 sm:px-12 lg:py-14">
+      <section className="relative flex flex-col justify-between gap-12 overflow-hidden bg-panel px-6 py-10 sm:px-12 lg:py-14">
         {/* The register ruling, inverted for the dark ground — the same motif
             as the landing page's hero and closing panel. */}
         <div
@@ -41,7 +41,7 @@ export function LoginPage() {
           aria-hidden="true"
           style={{
             backgroundImage:
-              'linear-gradient(to right, var(--color-brand-400) 1px, transparent 1px), linear-gradient(to bottom, var(--color-brand-400) 1px, transparent 1px)',
+              'linear-gradient(to right, var(--color-panel-rule) 1px, transparent 1px), linear-gradient(to bottom, var(--color-panel-rule) 1px, transparent 1px)',
             backgroundSize: '3.5rem 3.5rem',
             maskImage:
               'radial-gradient(ellipse 90% 60% at 20% 10%, black, transparent)',
@@ -56,15 +56,15 @@ export function LoginPage() {
           <h2 className="type-wide text-3xl font-bold tracking-tight text-balance text-white sm:text-4xl">
             Welcome back
           </h2>
-          <p className="mt-4 text-pretty text-brand-100">
+          <p className="mt-4 text-pretty text-panel-muted">
             Sign in to pick up where your team left off.
           </p>
 
           <ul className="mt-8 space-y-3">
             {HIGHLIGHTS.map((item) => (
-              <li key={item.id} className="flex items-start gap-3 text-brand-50">
+              <li key={item.id} className="flex items-start gap-3 text-panel-muted">
                 <span
-                  className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand-800 text-accent-300"
+                  className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-panel-hover text-panel-mark"
                   aria-hidden="true"
                 >
                   <CheckIcon className="h-3.5 w-3.5" />
@@ -75,7 +75,7 @@ export function LoginPage() {
           </ul>
         </div>
 
-        <p className="relative font-mono text-xs text-brand-300">
+        <p className="relative font-mono text-xs text-panel-faint">
           © {new Date().getFullYear()} HarkHR
         </p>
       </section>

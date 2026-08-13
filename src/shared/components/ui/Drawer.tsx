@@ -50,7 +50,7 @@ export function Drawer({
   return createPortal(
     <div className="fixed inset-0 z-50 flex justify-end">
       <div
-        className="animate-fade-in absolute inset-0 bg-brand-950/35"
+        className="animate-fade-in absolute inset-0 bg-scrim"
         aria-hidden="true"
         onClick={onClose}
       />
@@ -63,7 +63,7 @@ export function Drawer({
         tabIndex={-1}
         className={cn(
           'animate-slide-over relative z-10 flex h-dvh w-full max-w-md flex-col',
-          'border-l border-ink-200 bg-white shadow-pop',
+          'border-l border-ink-200 bg-surface shadow-pop',
           className,
         )}
       >

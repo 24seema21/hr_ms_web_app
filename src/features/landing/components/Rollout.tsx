@@ -85,7 +85,7 @@ export function Rollout() {
               meet. Borders on each cell instead would render 2px seams down
               the middle and 1px at the outside — the classic uneven grid.
             */
-            <li key={step.id} className="bg-white p-6 sm:p-7">
+            <li key={step.id} className="bg-surface p-6 sm:p-7">
               <span className="type-label text-accent-600" aria-hidden="true">
                 Step {step.marker}
               </span>

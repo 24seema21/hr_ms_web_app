@@ -141,7 +141,7 @@ export function RosterGrid() {
 
       <div
         aria-hidden="true"
-        className="overflow-hidden rounded-panel border border-ink-200 bg-white shadow-raised"
+        className="overflow-hidden rounded-panel border border-ink-200 bg-surface shadow-raised"
       >
         {/* ── Register header ──────────────────────────────────────────── */}
         <div className="flex items-center justify-between gap-4 border-b border-ink-200 bg-ink-50/70 px-4 py-3 sm:px-5">

@@ -92,7 +92,7 @@ export function AttendanceAnalytics({
         attendance percentage would make the whole row read as undifferentiated
         data rather than as an answer.
       */}
-      <dl className="mt-4 flex flex-wrap items-center gap-x-8 gap-y-3 rounded-card border border-ink-200 bg-white px-5 py-4 shadow-card">
+      <dl className="mt-4 flex flex-wrap items-center gap-x-8 gap-y-3 rounded-card border border-ink-200 bg-surface px-5 py-4 shadow-card">
         <div className="flex items-center gap-2">
           <ClockIcon className="h-4 w-4 text-ink-400" />
           <dt className="text-sm text-ink-600">Total worked</dt>

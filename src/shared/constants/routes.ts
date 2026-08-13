@@ -14,6 +14,7 @@ export const ROUTES = {
   DASHBOARD: '/dashboard',
   EMPLOYEES: '/employees',
   ATTENDANCE: '/attendance',
+  LEAVE: '/leave',
 } as const
 
 /**

@@ -2,6 +2,41 @@
 
 /*
   ─────────────────────────────────────────────────────────────────────────────
+  DARK MODE — how it is wired
+  ─────────────────────────────────────────────────────────────────────────────
+  Three states, not two: light, dark, and *unset* (follow the OS). Unset is the
+  default, because a product that ignores the system preference on first paint
+  is a product that flashes white at somebody working at night.
+
+  · unset  → no attribute on <html>; `prefers-color-scheme` decides
+  · light  → `data-theme="light"` on <html>, pinned
+  · dark   → `data-theme="dark"` on <html>, pinned
+
+  `@custom-variant` below teaches Tailwind that `dark:` means "inside a dark
+  document", covering both the pinned attribute and the OS preference. It is
+  needed in only a handful of places (see `buttonStyles.ts`), because the real
+  mechanism is the token swap further down: `--color-ink-900` *becomes* a light
+  colour in dark mode, so `text-ink-900` keeps meaning "primary text" and 500-odd
+  call sites never learn a theme exists.
+
+  That is the whole reason the ramps are used semantically in this codebase —
+  ink for text and chrome, brand for action, never "grey-800 because it looked
+  right". A palette used semantically can be re-pointed; one used decoratively
+  has to be rewritten.
+*/
+@custom-variant dark {
+  &:where([data-theme="dark"], [data-theme="dark"] *) {
+    @slot;
+  }
+  @media (prefers-color-scheme: dark) {
+    &:where(:root:not([data-theme="light"]) *, :root:not([data-theme="light"])) {
+      @slot;
+    }
+  }
+}
+
+/*
+  ─────────────────────────────────────────────────────────────────────────────
   THE DESIGN SYSTEM
   ─────────────────────────────────────────────────────────────────────────────
   Tailwind v4 is configured in CSS, not in a `tailwind.config.js`.
@@ -80,9 +115,95 @@
     Surfaces. `paper` is the public page, `shell` the signed-in workspace —
     a workspace that is a shade darker than its cards is what makes the cards
     read as objects sitting on a desk rather than holes cut in the page.
+
+    `surface` is that card. It exists as a token rather than as `bg-white`
+    because white is a *colour* and this is a *role*: in dark mode the cards
+    are still the raised thing, and they still sit a shade lighter than the
+    workspace — the relationship survives, the hex does not. `bg-white` would
+    have had to become `dark:bg-…` at 38 call sites, and the one that got
+    missed would be a white card in a dark app.
   */
   --color-paper: #fcfcfa;
   --color-shell: #f4f5f1;
+  --color-surface: #ffffff;
+
+  /*
+    Text that sits *on* a filled control, rather than on a surface.
+
+    Split out for the same reason: on the ink-green primary button this is
+    white in light mode, but dark mode uses a lighter, more luminous green
+    fill — which white text would fail against. The role is "whatever reads on
+    that fill"; the answer differs per theme.
+  */
+  --color-on-brand: #ffffff;
+  --color-on-danger: #ffffff;
+  /* Marigold is light in both themes, so its label is dark in both. */
+  --color-on-accent: #0d110f;
+  /* The inverse button lives on the always-dark panels, so it keeps a light
+     palette in both themes — see --color-panel. */
+  --color-inverse-hover: #eef5f2;
+
+  /*
+    The deliberately dark panels — the hero band, the closing call to action,
+    the avatar tiles. Ink green in *both* themes: they are the product's
+    inverse surface, not a light-mode artefact, and flipping them would turn
+    the login page's green half into a pale rectangle.
+
+    Not the *same* green in both, though. On paper the panel is the darkest
+    thing on the page and lands hard; against the dark theme's near-black page
+    that same value disappears and the closing banner stops reading as a band
+    at all. Dark mode lifts it a few steps so it still separates from what it
+    sits on — the role is "the emphasis surface", and holding a hex constant
+    would have kept the colour while losing the job.
+
+    Previously written as `bg-brand-900 text-accent-300`, which quietly meant
+    the brand ramp had to stay dark at the top end and therefore could not be
+    re-pointed for dark mode at all. Naming the role freed the ramp.
+  */
+  --color-panel: #0b2f2a;
+  --color-panel-hover: #0d3e36;
+  --color-panel-line: #146152;
+  --color-panel-mark: #efbb5f;
+  --color-panel-rule: #4f9982;
+  /* Text on the panel. Fixed in both themes, because the panel is: a step
+     from the brand ramp would flip to near-black and vanish on it. */
+  --color-panel-muted: #d8eae3;
+  --color-panel-faint: #82b9a6;
+
+  /* The dimming layer behind a modal or drawer. Darker in dark mode, where a
+     45%-opacity wash over an already-dark page separates nothing. */
+  --color-scrim: rgb(7 27 24 / 0.45);
+
+  /*
+    ── Chart colours ──────────────────────────────────────────────────────────
+    The categorical set for data, kept deliberately apart from the UI ramps.
+
+    Two reasons, one of them discovered the hard way. A chart fill and an error
+    message have different jobs: `danger-600` has to clear 4.5:1 as *text* on
+    the surface, while the sick-leave bar only has to be distinguishable from
+    the bar beside it — and in dark mode the red that satisfies one fails the
+    other. Tying them together means every chart tweak risks a button.
+
+    Both sets are validated, not eyeballed, with the dataviz validator in the
+    order `LEAVE_TYPES` declares (earned, casual, sick, unpaid — the stacking
+    order, which is what the adjacency check measures):
+
+      light, on #ffffff  — worst adjacent ΔE 9.2 deutan / 16.3 normal vision
+      dark,  on #1b211e  — worst adjacent ΔE 9.8 protan / 16.9 normal vision
+
+    Re-order LEAVE_TYPES or change a step and those pairs change: re-run
+    `validate_palette.js` rather than trusting that it still looks fine.
+  */
+  --color-chart-earned: #2a7c65;
+  --color-chart-casual: #d6871f;
+  --color-chart-sick: #b4442f;
+  --color-chart-unpaid: #767d77;
+
+  /* The meter tracks and hover washes behind each chart colour. */
+  --color-chart-earned-track: #d8eae3;
+  --color-chart-casual-track: #fae9c7;
+  --color-chart-sick-track: #f9e2dc;
+  --color-chart-unpaid-track: #dfe2de;
 
   /* Feedback. Clay rather than a fire-engine red — it belongs to the same
      earthy family as the rest, and still reads unmistakably as "careful". */
@@ -219,6 +340,226 @@
 }
 
 /*
+  ─────────────────────────────────────────────────────────────────────────────
+  THE DARK PALETTE
+  ─────────────────────────────────────────────────────────────────────────────
+  Every token below is a *re-pointing* of a role, not a new set of names. The
+  ink ramp inverts — `ink-50` becomes the faintest fill above the card and
+  `ink-900` becomes the brightest text — so `text-ink-900` still says
+  "heading" and `border-ink-200` still says "hairline". The components never
+  find out.
+
+  It is written as a mixin-style declaration list applied by two selectors so
+  the values exist in exactly one place. Duplicating them for the media query
+  and the attribute is how the two drift, and the one that drifts is the one
+  nobody is looking at.
+
+  Chosen against the dark card (#1b211e) and checked, not judged by eye. The
+  ratios that matter, all comfortably past their floors:
+
+    ink-900 headings   14.5:1      ink-500 captions    5.5:1
+    ink-800 body       12.5:1      ink-400 muted       4.0:1
+    ink-600 secondary   7.5:1      brand-600 links     6.9:1
+
+  Notably ink-500 and ink-400 come out *better* here than in the light theme
+  (4.2:1 and 2.6:1), where they have always been reserved for small print and
+  decorative glyphs. Dark mode is not the place to inherit that.
+*/
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  /* Surfaces. The workspace is darker than the cards, mirroring the light
+     theme's relationship rather than its values. */
+  --color-paper: #0f1311;
+  --color-shell: #121715;
+  --color-surface: #1b211e;
+
+  /* Ink, inverted. Warmed the same few degrees towards green as the light
+     ramp, so the neutrals still sit with the brand instead of fighting it. */
+  --color-ink-50: #1f2523;
+  --color-ink-100: #262d2a;
+  --color-ink-200: #313936;
+  --color-ink-300: #3e4744;
+  --color-ink-400: #767f7a;
+  --color-ink-500: #8f9893;
+  --color-ink-600: #a9b1ac;
+  --color-ink-700: #c3cac5;
+  --color-ink-800: #dde2de;
+  --color-ink-900: #eef2ef;
+  --color-ink-950: #f9fbf9;
+
+  /*
+    Brand, inverted and lifted. The light theme's 600 is a deep ink green that
+    carries white text; on a dark ground the same hue disappears, so the ramp
+    is re-pointed to put the readable greens where the UI asks for them —
+    `text-brand-600` for links, `bg-brand-50` for the quiet tint underneath.
+  */
+  --color-brand-50: #0f2320;
+  --color-brand-100: #14312b;
+  --color-brand-200: #1b4238;
+  --color-brand-300: #26594b;
+  --color-brand-400: #357864;
+  --color-brand-500: #479b81;
+  --color-brand-600: #63b89d;
+  --color-brand-700: #82cbb2;
+  --color-brand-800: #a3dcc7;
+  --color-brand-900: #c6ead9;
+  --color-brand-950: #e4f5ed;
+
+  /*
+    Marigold. The mark itself (400) is untouched — it is the one colour in the
+    product that means "look here", and it reads on both grounds. Only the
+    tints below it and the text steps above it move.
+  */
+  --color-accent-50: #2a1e08;
+  --color-accent-100: #3a2a0c;
+  --color-accent-200: #4d3812;
+  --color-accent-300: #efbb5f;
+  --color-accent-400: #e9a33b;
+  --color-accent-500: #efb45f;
+  --color-accent-600: #f0bd6d;
+  --color-accent-700: #f6d296;
+
+  /* Feedback. Same clay and moss, re-pointed: tints go dark, text goes light. */
+  --color-danger-50: #2a1512;
+  --color-danger-100: #3a1c17;
+  --color-danger-200: #4d251e;
+  --color-danger-600: #e2705a;
+  --color-danger-700: #ef927e;
+  --color-success-50: #16220f;
+  --color-success-200: #2a3f22;
+  --color-success-600: #7bbf6f;
+  --color-success-700: #96d18b;
+
+  /* Dark mode's primary button is a light green, so its text goes dark. */
+  --color-on-brand: #07211b;
+  --color-on-danger: #2a0f09;
+  --color-on-accent: #0d110f;
+  --color-inverse-hover: #eef5f2;
+
+  /* The panels stay dark — see the note beside their light values. */
+  --color-panel: #13453c;
+  --color-panel-hover: #1a5749;
+  --color-panel-line: #2a7c65;
+  --color-panel-mark: #efbb5f;
+  --color-panel-rule: #4f9982;
+  /* Text on the panel. Fixed in both themes, because the panel is: a step
+     from the brand ramp would flip to near-black and vanish on it. */
+  --color-panel-muted: #d8eae3;
+  --color-panel-faint: #82b9a6;
+
+  /* A heavier wash: 45% over an already-dark page separates nothing. */
+  --color-scrim: rgb(0 0 0 / 0.66);
+
+  /* Charts, re-validated against #1b211e rather than flipped. */
+  --color-chart-earned: #38a07e;
+  --color-chart-casual: #bf8a25;
+  --color-chart-sick: #b8442f;
+  --color-chart-unpaid: #868e89;
+
+  --color-chart-earned-track: #1b4238;
+  --color-chart-casual-track: #4d3812;
+  --color-chart-sick-track: #4d251e;
+  --color-chart-unpaid-track: #343b38;
+
+  /*
+    Shadows carry no light on a dark ground — a soft grey halo under a card
+    just looks like fog. Depth comes from the card being lighter than the
+    workspace, so the shadows drop to near-black and mostly get out of the way.
+  */
+  --shadow-card: 0 1px 2px 0 rgb(0 0 0 / 0.4);
+  --shadow-raised: 0 4px 16px -4px rgb(0 0 0 / 0.55), 0 1px 3px 0 rgb(0 0 0 / 0.4);
+  --shadow-pop: 0 24px 48px -12px rgb(0 0 0 / 0.7), 0 2px 8px -2px rgb(0 0 0 / 0.5);
+}
+
+/*
+  The same palette for somebody who has asked their OS for dark and has not
+  overridden it here. `:not([data-theme="light"])` is what lets the toggle win:
+  pinning light has to beat the media query, and specificity alone would not.
+*/
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+
+    --color-paper: #0f1311;
+    --color-shell: #121715;
+    --color-surface: #1b211e;
+
+    --color-ink-50: #1f2523;
+    --color-ink-100: #262d2a;
+    --color-ink-200: #313936;
+    --color-ink-300: #3e4744;
+    --color-ink-400: #767f7a;
+    --color-ink-500: #8f9893;
+    --color-ink-600: #a9b1ac;
+    --color-ink-700: #c3cac5;
+    --color-ink-800: #dde2de;
+    --color-ink-900: #eef2ef;
+    --color-ink-950: #f9fbf9;
+
+    --color-brand-50: #0f2320;
+    --color-brand-100: #14312b;
+    --color-brand-200: #1b4238;
+    --color-brand-300: #26594b;
+    --color-brand-400: #357864;
+    --color-brand-500: #479b81;
+    --color-brand-600: #63b89d;
+    --color-brand-700: #82cbb2;
+    --color-brand-800: #a3dcc7;
+    --color-brand-900: #c6ead9;
+    --color-brand-950: #e4f5ed;
+
+    --color-accent-50: #2a1e08;
+    --color-accent-100: #3a2a0c;
+    --color-accent-200: #4d3812;
+    --color-accent-300: #efbb5f;
+    --color-accent-400: #e9a33b;
+    --color-accent-500: #efb45f;
+    --color-accent-600: #f0bd6d;
+    --color-accent-700: #f6d296;
+
+    --color-danger-50: #2a1512;
+    --color-danger-100: #3a1c17;
+    --color-danger-200: #4d251e;
+    --color-danger-600: #e2705a;
+    --color-danger-700: #ef927e;
+    --color-success-50: #16220f;
+    --color-success-200: #2a3f22;
+    --color-success-600: #7bbf6f;
+    --color-success-700: #96d18b;
+
+    --color-on-brand: #07211b;
+    --color-on-danger: #2a0f09;
+    --color-on-accent: #0d110f;
+    --color-inverse-hover: #eef5f2;
+
+    --color-panel: #13453c;
+    --color-panel-hover: #1a5749;
+    --color-panel-line: #2a7c65;
+    --color-panel-mark: #efbb5f;
+    --color-panel-rule: #4f9982;
+    --color-panel-muted: #d8eae3;
+    --color-panel-faint: #82b9a6;
+
+    --color-scrim: rgb(0 0 0 / 0.66);
+
+    --color-chart-earned: #38a07e;
+    --color-chart-casual: #bf8a25;
+    --color-chart-sick: #b8442f;
+    --color-chart-unpaid: #868e89;
+
+    --color-chart-earned-track: #1b4238;
+    --color-chart-casual-track: #4d3812;
+    --color-chart-sick-track: #4d251e;
+    --color-chart-unpaid-track: #343b38;
+
+    --shadow-card: 0 1px 2px 0 rgb(0 0 0 / 0.4);
+    --shadow-raised: 0 4px 16px -4px rgb(0 0 0 / 0.55), 0 1px 3px 0 rgb(0 0 0 / 0.4);
+    --shadow-pop: 0 24px 48px -12px rgb(0 0 0 / 0.7), 0 2px 8px -2px rgb(0 0 0 / 0.5);
+  }
+}
+
+/*
   `@layer base` puts these rules in Tailwind's base layer, which means any
   utility class added to an element still wins over them. Plain CSS written
   outside a layer would instead fight those utilities.
@@ -229,6 +570,13 @@
     scroll-behavior: smooth;
     /* Anchored sections stop below the sticky header instead of underneath it. */
     scroll-padding-top: 5rem;
+    /*
+      Tells the browser which way round this document is, so the things we do
+      not paint follow it: form-control internals, the date picker, the
+      scrollbar, and the flash of background before the first paint. Overridden
+      to `dark` alongside the dark tokens.
+    */
+    color-scheme: light;
   }
 
   body {

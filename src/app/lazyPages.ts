@@ -48,3 +48,9 @@ export const AttendancePage = lazy(() =>
     default: m.AttendancePage,
   })),
 )
+
+export const LeavePage = lazy(() =>
+  import('@/features/leave/pages/LeavePage').then((m) => ({
+    default: m.LeavePage,
+  })),
+)

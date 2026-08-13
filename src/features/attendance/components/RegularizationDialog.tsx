@@ -161,7 +161,7 @@ export function RegularizationDialog({
           slot, because the submit button has to stay inside the <form> for
           Enter to work. Same pattern as the employee form.
         */}
-        <div className="sticky bottom-0 -mx-6 mt-8 flex flex-col-reverse gap-3 border-t border-ink-200 bg-white px-6 py-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="sticky bottom-0 -mx-6 mt-8 flex flex-col-reverse gap-3 border-t border-ink-200 bg-surface px-6 py-4 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-xs text-ink-500">
             Goes to <span className="font-medium text-ink-800">{approverName}</span>{' '}
             for approval.

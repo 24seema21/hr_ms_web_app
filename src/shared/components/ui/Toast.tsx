@@ -68,7 +68,7 @@ export function Toast({
         role="status"
         className={cn(
           'animate-toast-in pointer-events-auto flex w-full max-w-sm items-start gap-3',
-          'rounded-card border bg-white px-4 py-3 shadow-pop',
+          'rounded-card border bg-surface px-4 py-3 shadow-pop',
           isDanger ? 'border-danger-200' : 'border-ink-200',
         )}
       >

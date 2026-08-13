@@ -37,6 +37,35 @@
     />
   </head>
   <body>
+    <!--
+      Theme, applied before the first paint.
+
+      This has to be a blocking, inline, *classic* script in the body — not the
+      module below, which is deferred by definition and therefore runs after
+      the browser has already painted. Without it, somebody who chose dark gets
+      a full white page for a frame or two before React mounts and corrects it,
+      which at night is genuinely unpleasant and looks like a bug.
+
+      Deliberately duplicated logic rather than an import: a module would be
+      deferred and defeat the entire point. It is kept to the two lines that
+      must not drift — the storage key and the attribute — both of which are
+      documented in src/shared/lib/theme.ts.
+    -->
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem('harkhr.theme')
+          if (stored === 'light' || stored === 'dark') {
+            document.documentElement.setAttribute('data-theme', stored)
+          }
+          // No attribute otherwise: the prefers-color-scheme block in
+          // index.css already handles "follow the OS", with no JS involved.
+        } catch (error) {
+          // Private mode and blocked storage both throw. The OS preference
+          // still applies, so there is nothing to recover from.
+        }
+      })()
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

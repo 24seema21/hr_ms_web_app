@@ -137,7 +137,7 @@ export function AttendancePage() {
           Monday to today. Anything missing can be regularised from here.
         </p>
 
-        <div className="mt-4 overflow-hidden rounded-card border border-ink-200 bg-white shadow-card">
+        <div className="mt-4 overflow-hidden rounded-card border border-ink-200 bg-surface shadow-card">
           <AttendanceDayTable
             days={weekDays}
             caption="Attendance for this week"
@@ -170,7 +170,7 @@ export function AttendancePage() {
             and two chevrons cover the change people actually make (one month
             back).
           */}
-          <div className="flex items-center gap-1 rounded-control border border-ink-300 bg-white p-1">
+          <div className="flex items-center gap-1 rounded-control border border-ink-300 bg-surface p-1">
             <IconButton
               label="Previous month"
               icon={<ChevronLeftIcon className="h-5 w-5" />}
@@ -197,7 +197,7 @@ export function AttendancePage() {
         </div>
 
         {/* ── History ──────────────────────────────────────────────────── */}
-        <div className="mt-6 overflow-hidden rounded-card border border-ink-200 bg-white shadow-card">
+        <div className="mt-6 overflow-hidden rounded-card border border-ink-200 bg-surface shadow-card">
           <div className="flex flex-col gap-3 border-b border-ink-200 p-4 sm:flex-row sm:items-center">
             <p className="type-label text-ink-500">Daily record</p>
 

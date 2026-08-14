@@ -54,3 +54,14 @@ export const LeavePage = lazy(() =>
     default: m.LeavePage,
   })),
 )
+
+/*
+  Settings is the one page rendered with MUI rather than Tailwind, so this
+  boundary earns its keep twice over: it keeps MUI and Emotion out of every
+  other page's bundle, not just the settings screens themselves.
+*/
+export const SettingsPage = lazy(() =>
+  import('@/features/settings/pages/SettingsPage').then((m) => ({
+    default: m.SettingsPage,
+  })),
+)

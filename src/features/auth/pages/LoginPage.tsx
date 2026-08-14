@@ -48,7 +48,7 @@ export function LoginPage() {
           }}
         />
 
-        <Link to={ROUTES.HOME} aria-label="HarkHR home" className="relative w-fit">
+        <Link to={ROUTES.HOME} aria-label="Unity Portal home" className="relative w-fit">
           <Logo tone="light" />
         </Link>
 
@@ -76,7 +76,7 @@ export function LoginPage() {
         </div>
 
         <p className="relative font-mono text-xs text-panel-faint">
-          © {new Date().getFullYear()} HarkHR
+          © {new Date().getFullYear()} Unity Portal
         </p>
       </section>
 
@@ -89,7 +89,7 @@ export function LoginPage() {
             stays the top-level heading.
           */}
           <h1 className="type-wide text-2xl font-bold tracking-tight text-ink-900">
-            Sign in to HarkHR
+            Sign in to Unity Portal
           </h1>
           <p className="mt-2 text-sm text-ink-600">
             Enter your work email and password to continue.

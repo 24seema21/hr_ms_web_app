@@ -46,9 +46,10 @@ export function Logo({ className, markOnly = false, tone = 'dark' }: LogoProps) 
             tone === 'light' ? 'text-white' : 'text-ink-900',
           )}
         >
-          Hark
+          Unity
           <span className={tone === 'light' ? 'text-panel-mark' : 'text-brand-600'}>
-            HR
+            {' '}
+            Portal
           </span>
         </span>
       )}

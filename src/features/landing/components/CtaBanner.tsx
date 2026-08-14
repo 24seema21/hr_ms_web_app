@@ -36,25 +36,30 @@ export function CtaBanner() {
             </h2>
 
             <p className="mx-auto mt-5 max-w-xl text-lg text-pretty text-panel-muted">
-              Sign in to your workspace and start with the directory — the one
-              record everything else is built on.
+              Start with the directory — the one record onboarding, attendance,
+              leave and everything after them is built on.
             </p>
 
             <div className="mt-9 flex flex-col justify-center gap-3 sm:flex-row">
               <ButtonLink to={ROUTES.LOGIN} variant="accent" size="lg">
-                Sign in to HarkHR
+                Sign in to Unity Portal
               </ButtonLink>
               <ButtonLink
-                to="#modules"
+                to="#plans"
                 size="lg"
                 // A transparent button on a coloured band: the border carries
                 // the shape. Passed as `className` rather than becoming a
                 // seventh variant, because it is used exactly once.
                 className="border border-panel-line bg-transparent text-white hover:bg-panel-hover"
               >
-                Review the modules
+                Compare the plans
               </ButtonLink>
             </div>
+
+            <p className="mt-8 font-mono text-xs text-panel-faint">
+              ₹49 per employee / month · admin and employee access included ·
+              payroll next
+            </p>
           </div>
         </div>
       </Container>

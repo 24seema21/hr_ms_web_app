@@ -1,6 +1,10 @@
 import { SiteHeader } from '../components/SiteHeader'
 import { Hero } from '../components/Hero'
+import { Lifecycle } from '../components/Lifecycle'
 import { ModuleIndex } from '../components/ModuleIndex'
+import { ProductTour } from '../components/ProductTour'
+import { AiAndTrust } from '../components/AiAndTrust'
+import { Plans } from '../components/Plans'
 import { Rollout } from '../components/Rollout'
 import { CtaBanner } from '../components/CtaBanner'
 import { SiteFooter } from '../components/SiteFooter'
@@ -10,13 +14,21 @@ import { SiteFooter } from '../components/SiteFooter'
  * nothing else.
  *
  * That is the whole point of splitting it up: this file tells you the shape of
- * the page in six lines, and each section stays small enough to read in one
- * screenful. A single 500-line LandingPage.tsx would tell you nothing at a
+ * the page in ten lines, and each section stays small enough to read in one
+ * screenful. A single 1,500-line LandingPage.tsx would tell you nothing at a
  * glance and could not be reused or tested in pieces.
  *
- * The order is an argument, read top to bottom: here is the register (Hero),
- * here is what writes into it (ModuleIndex), here is how you get yours going
- * (Rollout), here is the way in (CtaBanner).
+ * The order is an argument, read top to bottom — and it is the order a buyer
+ * asks the questions in, not the order the modules were built in:
+ *
+ *   Hero        here is the register everything writes into
+ *   Lifecycle   here is how much of the employment it covers
+ *   ModuleIndex here is every module, and how finished each one is
+ *   ProductTour here is what you would actually be looking at all day
+ *   AiAndTrust  here is what the AI does, and what it is not allowed to do
+ *   Plans       here is what it costs and what the tier unlocks
+ *   Rollout     here is how you get yours going
+ *   CtaBanner   here is the way in
  */
 export function LandingPage() {
   return (
@@ -42,7 +54,11 @@ export function LandingPage() {
       */}
       <main id="main">
         <Hero />
+        <Lifecycle />
         <ModuleIndex />
+        <ProductTour />
+        <AiAndTrust />
+        <Plans />
         <Rollout />
         <CtaBanner />
       </main>

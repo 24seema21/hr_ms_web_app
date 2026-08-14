@@ -13,40 +13,44 @@ const STEPS = [
     marker: '02',
     title: 'Set your policies',
     description:
-      'Leave types, shift patterns, approval chains and salary components — configured once, applied everywhere automatically.',
+      'Leave types, working weeks, probation rules, onboarding stages and approval chains — configured once, applied to everyone automatically.',
   },
   {
     id: 'run',
     marker: '03',
     title: 'Go live',
     description:
-      'Managers approve from their inbox, employees self-serve from their phone, and payroll reconciles itself at month end.',
+      'Admins run the configuration, managers approve from the queue, employees self-serve from their phone. No consultant on site.',
   },
 ] as const
 
 /*
-  Three promises about the data, and each one is a real property of the system
-  rather than a slogan: DELETE is a deactivation, so history survives; every
-  module reads one row; the export is the customer's own data.
+  What being early actually means, stated as three commitments rather than an
+  apology.
+
+  The product is mid-build and the page says so twice already; this is the
+  section that turns that into the reason to sign rather than the reason to
+  wait. Every line here is something a large vendor structurally cannot offer,
+  which is the only honest advantage a small one has.
 */
-const DATA_RULES = [
+const EARLY_TERMS = [
   {
-    id: 'soft-delete',
-    title: 'Nothing is really deleted',
+    id: 'shape',
+    title: 'You shape what ships next',
     description:
-      'Removing someone deactivates the record. Payroll and attendance history stay intact and auditable.',
+      'Early customers set the roadmap order. Payroll is next; what follows it is decided by the people already using this.',
   },
   {
-    id: 'single-record',
-    title: 'One row, six readers',
+    id: 'changes',
+    title: 'Change requests, not tickets',
     description:
-      'Modules never keep their own copy of an employee, so they cannot disagree about one.',
+      'Configuration covers most needs. When it does not, the change is scoped with you directly — there is no queue behind a partner network.',
   },
   {
-    id: 'export',
-    title: 'Your data leaves when you do',
+    id: 'price',
+    title: 'Your price is held',
     description:
-      'Every table exports to CSV on request. No ransom, no migration project, no support ticket.',
+      'Introductory pricing stays yours as modules ship. The bill does not grow when assets, tickets and goals come out of build.',
   },
 ] as const
 
@@ -100,20 +104,20 @@ export function Rollout() {
         </ol>
 
         <div className="mt-12 border-t border-ink-300 pt-8">
-          <p className="type-label text-ink-500">And once you are in</p>
+          <p className="type-label text-ink-500">Coming in early</p>
           <dl className="mt-5 grid gap-6 sm:grid-cols-3">
-            {DATA_RULES.map((rule) => (
+            {EARLY_TERMS.map((term) => (
               /*
                 <dl>/<dt>/<dd>: each description genuinely *describes* its
                 term, and the markup says so rather than leaving a screen
                 reader to infer it from two adjacent paragraphs.
               */
-              <div key={rule.id}>
+              <div key={term.id}>
                 <dt className="text-sm font-semibold text-ink-900">
-                  {rule.title}
+                  {term.title}
                 </dt>
                 <dd className="mt-1.5 text-sm text-pretty text-ink-600">
-                  {rule.description}
+                  {term.description}
                 </dd>
               </div>
             ))}

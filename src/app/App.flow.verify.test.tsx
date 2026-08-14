@@ -62,7 +62,7 @@ test('full landing → login → dashboard → logout flow', async () => {
   // 1. Landing page renders.
   expect(
     await screen.findByRole('heading', {
-      name: /register every HR module writes in/i,
+      name: /first day to last, in one register/i,
       level: 1,
     }),
   ).toBeInTheDocument()
@@ -72,7 +72,7 @@ test('full landing → login → dashboard → logout flow', async () => {
   const headerSignIn = screen.getAllByRole('link', { name: /^sign in$/i })[0]
   await user.click(headerSignIn)
   expect(
-    await screen.findByRole('heading', { name: /sign in to harkhr/i, level: 1 }),
+    await screen.findByRole('heading', { name: /sign in to unity portal/i, level: 1 }),
   ).toBeInTheDocument()
   expect(window.location.pathname).toBe('/login')
   console.log('✓ 2  sign-in navigates to /login client-side')
@@ -128,7 +128,7 @@ test('full landing → login → dashboard → logout flow', async () => {
   expect(
     await screen.findByRole(
       'heading',
-      { name: /register every HR module writes in/i, level: 1 },
+      { name: /first day to last, in one register/i, level: 1 },
       LONG,
     ),
   ).toBeInTheDocument()
@@ -142,7 +142,7 @@ test('full landing → login → dashboard → logout flow', async () => {
     { timeout: 5000 },
   )
   expect(
-    await screen.findByRole('heading', { name: /sign in to harkhr/i, level: 1 }),
+    await screen.findByRole('heading', { name: /sign in to unity portal/i, level: 1 }),
   ).toBeInTheDocument()
   console.log('✓ 8b /dashboard while logged out redirects to /login')
 }, 30000)

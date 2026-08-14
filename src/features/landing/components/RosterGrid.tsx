@@ -136,7 +136,8 @@ export function RosterGrid() {
       <figcaption className="sr-only">
         An attendance register for six employees over two weeks. Most days are
         marked present, with a few remote days and one week of leave — the same
-        record that attendance, leave and payroll all read from.
+        record that onboarding, attendance, leave and every other module in
+        Unity Portal reads from.
       </figcaption>
 
       <div
@@ -260,8 +261,9 @@ export function RosterGrid() {
 
           <p className="font-mono text-xs text-ink-600">
             <span className="font-semibold text-ink-900">72</span> shifts ·{' '}
-            <span className="font-semibold text-ink-900">4</span> leave days ·
-            payroll <span className="text-brand-700">ready</span>
+            <span className="font-semibold text-ink-900">4</span> leave days ·{' '}
+            <span className="font-semibold text-ink-900">0</span> left to{' '}
+            <span className="text-brand-700">reconcile</span>
           </p>
         </div>
       </div>

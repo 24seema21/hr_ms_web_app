@@ -1,6 +1,9 @@
 import { Container } from '@/shared/components/layout/Container'
+import { Badge } from '@/shared/components/ui/Badge'
+import type { BadgeTone } from '@/shared/components/ui/Badge'
 import { MODULE_ICONS } from '@/shared/components/ui/moduleIcons'
 import { FEATURES } from '../data/features'
+import type { ModuleStatus } from '../data/features'
 
 /** The fields every module in the list below draws from. */
 const SHARED_RECORD = [
@@ -8,9 +11,27 @@ const SHARED_RECORD = [
   'contact',
   'location',
   'reporting line',
+  'joining date',
   'shift pattern',
-  'salary structure',
+  'probation status',
+  'access role',
 ] as const
+
+/**
+ * How each build state is labelled and toned.
+ *
+ * `live` is deliberately the quiet one. Shipped is the baseline — it is the
+ * two unfinished states that a buyer needs to spot from across the page, so
+ * those get the marigold and the outline, and "live" gets a plain tick.
+ */
+const STATUS_PRESENTATION: Record<
+  ModuleStatus,
+  { label: string; tone: BadgeTone }
+> = {
+  live: { label: 'Live', tone: 'success' },
+  building: { label: 'In build', tone: 'accent' },
+  planned: { label: 'Planned', tone: 'neutral' },
+}
 
 export function ModuleIndex() {
   return (
@@ -38,7 +59,7 @@ export function ModuleIndex() {
               id="modules-heading"
               className="type-wide mt-4 text-3xl font-bold tracking-tight text-balance text-ink-900 sm:text-4xl"
             >
-              Six modules, one employee record
+              Eleven modules, one employee record
             </h2>
             <p className="mt-5 max-w-md text-lg text-pretty text-ink-600">
               Nothing is entered twice, because there is only one place to enter
@@ -67,6 +88,16 @@ export function ModuleIndex() {
                 ))}
               </ul>
             </div>
+
+            {/*
+              Said once, plainly, next to the badges that make it concrete.
+              A roadmap disclosed on the landing page is a smaller problem than
+              a roadmap discovered during the trial.
+            */}
+            <p className="mt-6 text-sm text-pretty text-ink-500">
+              We are mid-build and we label it. Every module is marked live, in
+              build or planned, and the marks stay honest as they ship.
+            </p>
           </div>
 
           <ul className="lg:col-span-7">
@@ -78,6 +109,7 @@ export function ModuleIndex() {
                 otherwise ships as an invisible gap in a card.
               */
               const Icon = MODULE_ICONS[feature.id]
+              const status = STATUS_PRESENTATION[feature.status]
 
               return (
                 /*
@@ -94,9 +126,15 @@ export function ModuleIndex() {
                   </span>
 
                   <div className="min-w-0">
-                    <h3 className="type-wide text-base font-semibold text-ink-900">
-                      {feature.title}
-                    </h3>
+                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
+                      <h3 className="type-wide text-base font-semibold text-ink-900">
+                        {feature.title}
+                      </h3>
+                      <Badge tone={status.tone} mono>
+                        {status.label}
+                      </Badge>
+                    </div>
+
                     <p className="mt-1.5 text-sm text-pretty text-ink-600">
                       {feature.description}
                     </p>

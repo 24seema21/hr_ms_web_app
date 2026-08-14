@@ -15,6 +15,7 @@ export const ROUTES = {
   EMPLOYEES: '/employees',
   ATTENDANCE: '/attendance',
   LEAVE: '/leave',
+  SETTINGS: '/settings',
 } as const
 
 /**

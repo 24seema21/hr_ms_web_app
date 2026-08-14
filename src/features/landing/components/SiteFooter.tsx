@@ -4,18 +4,26 @@ import { Logo } from '@/shared/components/ui/Logo'
 import { ROUTES } from '@/shared/constants/routes'
 
 const FOOTER_LINKS = [
+  { id: 'lifecycle', label: 'Lifecycle', href: '#lifecycle' },
   { id: 'modules', label: 'Modules', href: '#modules' },
+  { id: 'tour', label: 'Screens', href: '#tour' },
+  { id: 'assist', label: 'AI assist', href: '#assist' },
+  { id: 'plans', label: 'Pricing', href: '#plans' },
   { id: 'rollout', label: 'Rollout', href: '#rollout' },
 ] as const
 
 export function SiteFooter() {
   return (
     <footer className="border-t border-ink-200 bg-shell py-12">
-      <Container className="flex flex-col items-center gap-8 sm:flex-row sm:justify-between">
-        <div className="flex flex-col items-center gap-2 sm:items-start">
+      <Container className="flex flex-col items-center gap-8 lg:flex-row lg:items-start lg:justify-between">
+        <div className="flex flex-col items-center gap-2 lg:items-start">
           <Logo />
           <p className="font-mono text-xs text-ink-500">
-            HR, payroll and people ops on one record
+            The whole employment, on one record
+          </p>
+          <p className="max-w-xs text-center font-mono text-[0.6875rem] text-pretty text-ink-400 lg:text-left">
+            In active development. Modules are labelled live, in build or
+            planned, and the labels are kept current.
           </p>
         </div>
 
@@ -24,7 +32,7 @@ export function SiteFooter() {
           the section links stay reachable at every viewport width.
         */}
         <nav aria-label="Footer">
-          <ul className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3">
+          <ul className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
             {FOOTER_LINKS.map((link) => (
               <li key={link.id}>
                 <a
@@ -46,12 +54,12 @@ export function SiteFooter() {
           </ul>
         </nav>
 
-        <p className="text-sm text-ink-500">
+        <p className="text-sm whitespace-nowrap text-ink-500">
           {/*
             The year is computed, not hard-coded — otherwise the footer quietly
             goes stale every January.
           */}
-          © {new Date().getFullYear()} HarkHR
+          © {new Date().getFullYear()} Unity Portal
         </p>
       </Container>
     </footer>

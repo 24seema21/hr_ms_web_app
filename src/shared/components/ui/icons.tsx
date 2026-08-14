@@ -334,6 +334,97 @@ export function MoonIcon({ className }: IconProps) {
   )
 }
 
+/** Onboarding: a checklist, because that is literally what a joiner gets. */
+export function ChecklistIcon({ className }: IconProps) {
+  return (
+    <Glyph className={className}>
+      <path d="M4 6.5 5.5 8 8.5 5M4 12.5 5.5 14l3-3M4 18.5 5.5 20l3-3" />
+      <path d="M12 6.5h8M12 12.5h8M12 18.5h8" />
+    </Glyph>
+  )
+}
+
+/** Assets: the laptop on the desk, which is most of what "asset" means here. */
+export function LaptopIcon({ className }: IconProps) {
+  return (
+    <Glyph className={className}>
+      <rect x="4" y="5.5" width="16" height="10.5" rx="1.5" />
+      <path d="M2.5 19.5h19" />
+    </Glyph>
+  )
+}
+
+/** Tickets: a stub with a perforation down the middle. */
+export function TicketIcon({ className }: IconProps) {
+  return (
+    <Glyph className={className}>
+      <path d="M4 8.5V7a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v1.5a2.5 2.5 0 0 0 0 7V17a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-1.5a2.5 2.5 0 0 0 0-7Z" />
+      <path d="M13.5 9v1.5M13.5 13.5V15" />
+    </Glyph>
+  )
+}
+
+/**
+ * Goals: concentric rings, not a star.
+ *
+ * A star means "favourite" everywhere else in software, and a goal is a target
+ * you are moving towards — the rings say the second thing without ambiguity.
+ */
+export function TargetIcon({ className }: IconProps) {
+  return (
+    <Glyph className={className}>
+      <circle cx="12" cy="12" r="8" />
+      <circle cx="12" cy="12" r="4" />
+      <circle cx="12" cy="12" r="1" fill="currentColor" stroke="none" />
+    </Glyph>
+  )
+}
+
+/** Probation: a fixed window of time that runs out. */
+export function HourglassIcon({ className }: IconProps) {
+  return (
+    <Glyph className={className}>
+      <path d="M6 3.5h12M6 20.5h12" />
+      <path d="M7.5 3.5v3.2a4 4 0 0 0 1.6 3.2L12 12l-2.9 2.1a4 4 0 0 0-1.6 3.2v3.2" />
+      <path d="M16.5 3.5v3.2a4 4 0 0 1-1.6 3.2L12 12l2.9 2.1a4 4 0 0 1 1.6 3.2v3.2" />
+    </Glyph>
+  )
+}
+
+/**
+ * The AI assist mark: a four-point spark.
+ *
+ * Drawn rather than borrowed, at the same 1.6px weight as the rest — the usual
+ * imported "sparkle" glyph is a hairline and reads as dirt beside these.
+ */
+export function SparkIcon({ className }: IconProps) {
+  return (
+    <Glyph className={className}>
+      <path d="M12 3.5c0 4 1.5 5.5 5.5 5.5-4 0-5.5 1.5-5.5 5.5 0-4-1.5-5.5-5.5-5.5 4 0 5.5-1.5 5.5-5.5Z" />
+      <path d="M18 15c0 2 .8 2.8 2.8 2.8-2 0-2.8.8-2.8 2.8 0-2-.8-2.8-2.8-2.8 2 0 2.8-.8 2.8-2.8Z" />
+    </Glyph>
+  )
+}
+
+export function ShieldIcon({ className }: IconProps) {
+  return (
+    <Glyph className={className}>
+      <path d="M12 3.5 5 6v5.5c0 4.4 2.9 7.7 7 9 4.1-1.3 7-4.6 7-9V6l-7-2.5Z" />
+      <path d="m9 12 2.2 2.2L15.5 10" />
+    </Glyph>
+  )
+}
+
+/** What a plan has not unlocked yet. */
+export function LockIcon({ className }: IconProps) {
+  return (
+    <Glyph className={className}>
+      <rect x="4.5" y="10.5" width="15" height="9.5" rx="2" />
+      <path d="M8 10.5V7.8a4 4 0 0 1 8 0v2.7" />
+    </Glyph>
+  )
+}
+
 export function PaperclipIcon({ className }: IconProps) {
   return (
     <Glyph className={className}>
@@ -359,6 +450,23 @@ export function GridIcon({ className }: IconProps) {
       <rect x="3.5" y="4.5" width="17" height="15" rx="1.5" />
       <path d="M3.5 9.5h17" />
       <path d="M9 9.5v10M15 9.5v10" />
+    </Glyph>
+  )
+}
+
+/**
+ * Settings: two labelled sliders rather than the usual cogwheel.
+ *
+ * A gear at this stroke weight turns into a smudge at 20px — its teeth are
+ * finer than the 1.6px grid the rest of the set is drawn on — and sliders say
+ * "configure" just as plainly while staying legible.
+ */
+export function SlidersIcon({ className }: IconProps) {
+  return (
+    <Glyph className={className}>
+      <path d="M4 8h10M18 8h2M4 16h4M12 16h8" />
+      <circle cx="16" cy="8" r="2.2" />
+      <circle cx="10" cy="16" r="2.2" />
     </Glyph>
   )
 }

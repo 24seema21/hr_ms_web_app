@@ -1,4 +1,4 @@
-# HarkHR — HRMS Web
+# Unity Portal — HRMS Web
 
 An HR management system for growing teams. **Phase 1** delivers the two
 public-facing pages — the marketing landing page and login — along with the

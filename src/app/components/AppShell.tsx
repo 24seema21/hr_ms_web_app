@@ -12,6 +12,7 @@ import {
   GaugeIcon,
   LogOutIcon,
   MenuIcon,
+  SlidersIcon,
   UsersIcon,
   WalletIcon,
 } from '@/shared/components/ui/icons'
@@ -34,6 +35,7 @@ const NAV_ITEMS = [
   { to: ROUTES.EMPLOYEES, label: 'Employees', icon: UsersIcon },
   { to: ROUTES.ATTENDANCE, label: 'Attendance', icon: ClockIcon },
   { to: ROUTES.LEAVE, label: 'Leave', icon: CalendarIcon },
+  { to: ROUTES.SETTINGS, label: 'Settings', icon: SlidersIcon },
 ] as const
 
 /*
@@ -163,7 +165,7 @@ export function AppShell() {
       {/* ── Sidebar (desktop) ──────────────────────────────────────────── */}
       <div className="hidden border-r border-ink-200 bg-surface lg:flex lg:h-dvh lg:flex-col lg:sticky lg:top-0">
         <div className="flex h-16 items-center px-5">
-          <NavLink to={ROUTES.DASHBOARD} aria-label="HarkHR dashboard">
+          <NavLink to={ROUTES.DASHBOARD} aria-label="Unity Portal dashboard">
             <Logo />
           </NavLink>
         </div>

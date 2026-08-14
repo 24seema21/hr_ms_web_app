@@ -1,8 +1,10 @@
 import { describe, expect, it } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router'
 import { ThemeProvider } from '@/shared/context/ThemeProvider'
 import { FEATURES } from '../data/features'
+import { PLANS } from '../data/plans'
 import { LandingPage } from './LandingPage'
 
 /*
@@ -71,5 +73,62 @@ describe('LandingPage', () => {
     expect(screen.getByRole('banner')).toBeInTheDocument()
     expect(screen.getByRole('main')).toBeInTheDocument()
     expect(screen.getByRole('contentinfo')).toBeInTheDocument()
+  })
+
+  it('names every subscription tier', () => {
+    renderLandingPage()
+
+    for (const plan of PLANS) {
+      // Twice each: once as a pricing card, once as a matrix column. Both are
+      // load-bearing, so assert the count rather than just "at least one".
+      expect(screen.getAllByText(plan.name).length).toBeGreaterThanOrEqual(2)
+    }
+  })
+
+  /*
+    The tour is the only interactive thing on an otherwise static page, so it
+    is the only thing here worth a behavioural test. What is asserted is the
+    tab *contract* — one panel at a time, and the arrow keys move between
+    tabs — not which screen happens to be first.
+  */
+  describe('product tour', () => {
+    it('shows one panel at a time and switches on click', async () => {
+      const user = userEvent.setup()
+      renderLandingPage()
+
+      const tablist = screen.getByRole('tablist', { name: /product screens/i })
+      const tabs = within(tablist).getAllByRole('tab')
+      expect(tabs.length).toBeGreaterThan(1)
+
+      // Exactly one panel is mounted, so hidden screens are never announced.
+      expect(screen.getAllByRole('tabpanel')).toHaveLength(1)
+      expect(tabs[0]).toHaveAttribute('aria-selected', 'true')
+
+      await user.click(tabs[1])
+      expect(tabs[1]).toHaveAttribute('aria-selected', 'true')
+      expect(tabs[0]).toHaveAttribute('aria-selected', 'false')
+      expect(screen.getAllByRole('tabpanel')).toHaveLength(1)
+    })
+
+    it('is one tab stop, with the arrow keys moving between tabs', async () => {
+      const user = userEvent.setup()
+      renderLandingPage()
+
+      const tablist = screen.getByRole('tablist', { name: /product screens/i })
+      const tabs = within(tablist).getAllByRole('tab')
+
+      // Roving tabindex: only the selected tab is reachable with Tab.
+      expect(tabs[0]).toHaveAttribute('tabindex', '0')
+      expect(tabs[1]).toHaveAttribute('tabindex', '-1')
+
+      tabs[0].focus()
+      await user.keyboard('{ArrowRight}')
+      expect(tabs[1]).toHaveFocus()
+      expect(tabs[1]).toHaveAttribute('aria-selected', 'true')
+
+      // And it wraps, rather than dead-ending at the last tab.
+      await user.keyboard('{ArrowLeft}{ArrowLeft}')
+      expect(tabs[tabs.length - 1]).toHaveFocus()
+    })
   })
 })

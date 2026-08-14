@@ -31,8 +31,20 @@ import type { AxiosInstance } from 'axios'
  */
 const DEFAULT_BASE_URL = 'http://localhost:8080'
 
+/*
+  `||` rather than `??`, deliberately.
+
+  CI passes this through as `VITE_API_BASE_URL: ${{ vars.VITE_API_BASE_URL }}`,
+  and an undefined repository variable expands to the *empty string* — not to
+  nothing. `??` would accept that, leaving `baseURL: ''`, and every request
+  would quietly resolve against the page's own origin: a GET for /employee on
+  GitHub Pages, answered with the SPA's own HTML and a JSON parse error far
+  from the cause. Falling back on any blank value keeps the failure honest.
+*/
+const configuredBaseUrl = import.meta.env.VITE_API_BASE_URL?.trim()
+
 export const httpClient: AxiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL ?? DEFAULT_BASE_URL,
+  baseURL: configuredBaseUrl || DEFAULT_BASE_URL,
 
   /*
     Without a timeout, axios waits forever. A backend that accepts the socket

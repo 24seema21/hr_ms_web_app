@@ -1,0 +1,71 @@
+name: Deploy to GitHub Pages
+
+# Deploys are driven by the `github_page` branch. A pull request merged into it
+# lands as a push, so that case is covered too. `workflow_dispatch` adds a
+# manual "Run workflow" button for redeploying without a new commit.
+on:
+  push:
+    branches: [github_page]
+  workflow_dispatch:
+
+# The default GITHUB_TOKEN is read-only. Pages needs `pages: write` to publish
+# and `id-token: write` for the OIDC token that deploy-pages exchanges for a
+# one-time upload URL.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One deployment at a time. `cancel-in-progress: false` so a publish that is
+# already uploading is never killed halfway by a newer push.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          # Vite 8 needs Node 20.19+ / 22.12+, and package.json declares no
+          # `engines` field, so the runner version is pinned here instead.
+          node-version: '22'
+          cache: npm
+
+      # `npm ci` installs devDependencies as well, which is required: the build
+      # runs `tsc -b`, and tsconfig.node.json type-checks vite.config.ts with
+      # @types/node. Do not add --omit=dev.
+      - run: npm ci
+
+      - run: npm run lint
+      - run: npm test
+
+      # `npm run build` is `tsc -b && vite build`, so a type error fails the
+      # deploy here rather than shipping a broken bundle.
+      - run: npm run build
+        env:
+          # A repository *variable*, not a secret — the value is compiled into
+          # the shipped JavaScript and is readable by anyone. Unset for now:
+          # httpClient falls back to its default when this is blank.
+          VITE_API_BASE_URL: ${{ vars.VITE_API_BASE_URL }}
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  # Kept as its own job so only this one claims the `github-pages` environment.
+  # This is the shape GitHub's own Pages starter workflow uses.
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

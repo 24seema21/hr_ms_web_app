@@ -25,6 +25,17 @@ export const LandingPage = lazy(() =>
   })),
 )
 
+/*
+  The candidate landing page. Its own chunk, like every other page — which
+  means a visitor who never opens /v2 never downloads a byte of it, and the
+  comparison costs the live site nothing.
+*/
+export const LandingPageV2 = lazy(() =>
+  import('@/features/landing-v2/pages/LandingPageV2').then((m) => ({
+    default: m.LandingPageV2,
+  })),
+)
+
 export const LoginPage = lazy(() =>
   import('@/features/auth/pages/LoginPage').then((m) => ({
     default: m.LoginPage,

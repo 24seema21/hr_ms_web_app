@@ -7,6 +7,7 @@ import {
   DashboardPage,
   EmployeesPage,
   LandingPage,
+  LandingPageV2,
   LeavePage,
   LoginPage,
   SettingsPage,
@@ -39,7 +40,17 @@ const BASENAME = import.meta.env.BASE_URL.replace(/\/$/, '') || '/'
 */
 export const router = createBrowserRouter(
   [
-    { path: ROUTES.HOME, element: <LandingPage /> },
+    /*
+      The v2 design won and now serves the front door; the page it replaced is
+      parked at /v2 so the two can still be compared side by side.
+
+      Note that the *names* are now the wrong way round — ROUTES.LANDING_V2
+      points at the older `LandingPage`. That is the cost of leaving the loser
+      reachable, and it is paid off by deleting the `features/landing` slice
+      along with this route once nobody needs the comparison.
+    */
+    { path: ROUTES.LANDING_V2, element: <LandingPage /> },
+    { path: ROUTES.HOME, element: <LandingPageV2 /> },
     { path: ROUTES.LOGIN, element: <LoginPage /> },
     {
       /*

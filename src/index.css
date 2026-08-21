@@ -341,6 +341,107 @@
 
 /*
   ─────────────────────────────────────────────────────────────────────────────
+  THE V2 LANDING PALETTE — namespace `nx-`
+  ─────────────────────────────────────────────────────────────────────────────
+  A second, self-contained token set that exists for exactly one page: the
+  candidate landing page at /v2.
+
+  It is namespaced rather than layered on top of the ramps above because the two
+  designs are being *compared*, not merged. `--color-brand-600` has 500-odd call
+  sites across the signed-in product; re-pointing it to try out a brighter green
+  would redecorate the whole app to evaluate one page. A separate namespace
+  means /v2 can be as different as it likes and `git rm -r` is the entire
+  rollback plan.
+
+  ── The direction ────────────────────────────────────────────────────────────
+  Where the current landing page draws the muster roll — paper, hairlines, a
+  mark in a ruled cell — this one draws the *system*: luminous surfaces floating
+  over an aurora field, cards that lift under the cursor, and a rail down the
+  side that always says which part of the argument you are standing in.
+
+  Jade is the through-line to the product (the app's chrome is ink green, and a
+  landing page in an unrelated hue reads as a different company). Violet is its
+  cool counterweight — it carries the AI half of the story and the gradient
+  panels. Marigold survives from the original palette as the "in build" mark,
+  which keeps the roadmap honesty visually where it already was.
+*/
+@theme {
+  /* Ground and surfaces. The page is a cool near-white; cards are pure white
+     and get their separation from shadow rather than from a border alone. */
+  --color-nx-bg: #f7f8fb;
+  --color-nx-surface: #ffffff;
+  --color-nx-line: #e6e9f0;
+  --color-nx-line-strong: #d4d9e4;
+
+  /* Text. Three steps and no more — a fourth grey is how a palette starts
+     making decisions nobody can defend. */
+  --color-nx-ink: #0f1729;
+  --color-nx-muted: #5a6478;
+  --color-nx-faint: #8b94a6;
+
+  /*
+    Jade — the primary. `-ink` is the text-safe step: the fill at #0f9b76 is
+    3.4:1 on white and carries white text at button size, but it must never be
+    used *as* small text on the page ground. Two names, so the wrong one is
+    hard to reach for by accident.
+  */
+  --color-nx-jade: #0f9b76;
+  --color-nx-jade-hover: #0c8765;
+  --color-nx-jade-ink: #0a7a5c;
+  --color-nx-jade-soft: #e7f7f1;
+  --color-nx-jade-line: #b9e6d7;
+
+  /* Violet — the counterweight. Same three-step contract as jade. */
+  --color-nx-violet: #5b5bd6;
+  --color-nx-violet-ink: #4a4ac4;
+  --color-nx-violet-soft: #eeeefc;
+  --color-nx-violet-line: #cfd0f7;
+
+  /* Marigold, inherited. Reserved for "in build" and nothing else. */
+  --color-nx-amber: #e9a33b;
+  --color-nx-amber-ink: #96601a;
+  --color-nx-amber-soft: #fdf3e2;
+  --color-nx-amber-line: #f2d8a8;
+
+  /* Text on a filled control, and on the always-dark gradient panels. The
+     panel pair is fixed in both themes, because the panel is. */
+  --color-nx-on-fill: #ffffff;
+  --color-nx-panel-ink: #072a21;
+
+  /*
+    Shadows do the work borders used to. Tinted with the ink rather than black,
+    and long-and-soft rather than tight — that diffusion is most of what makes
+    a surface read as floating rather than as a box with a drop shadow.
+  */
+  --shadow-nx-soft: 0 1px 2px rgb(15 23 41 / 0.04),
+    0 8px 24px -12px rgb(15 23 41 / 0.1);
+  --shadow-nx-lift: 0 2px 4px rgb(15 23 41 / 0.04),
+    0 18px 40px -16px rgb(15 23 41 / 0.18);
+  --shadow-nx-hero: 0 4px 8px rgb(15 23 41 / 0.04),
+    0 40px 80px -32px rgb(15 23 41 / 0.28);
+
+  /*
+    Two fluid display sizes. Bigger and tighter than the current page's, which
+    shares its hero with a roster grid and has five columns to live in — this
+    headline gets the full measure and can afford to be loud.
+  */
+  --text-nx-hero: clamp(2.5rem, 1.2rem + 4.4vw, 4.5rem);
+  --text-nx-hero--line-height: 1.03;
+  --text-nx-hero--letter-spacing: -0.035em;
+
+  --text-nx-title: clamp(1.875rem, 1.2rem + 1.9vw, 2.875rem);
+  --text-nx-title--line-height: 1.1;
+  --text-nx-title--letter-spacing: -0.028em;
+
+  /* Radii, one scale up from the product's. Softer corners are most of the
+     difference between "2018 dashboard" and "2026 product site". */
+  --radius-nx: 1rem;
+  --radius-nx-lg: 1.5rem;
+  --radius-nx-xl: 2rem;
+}
+
+/*
+  ─────────────────────────────────────────────────────────────────────────────
   THE DARK PALETTE
   ─────────────────────────────────────────────────────────────────────────────
   Every token below is a *re-pointing* of a role, not a new set of names. The
@@ -470,6 +571,48 @@
   --shadow-card: 0 1px 2px 0 rgb(0 0 0 / 0.4);
   --shadow-raised: 0 4px 16px -4px rgb(0 0 0 / 0.55), 0 1px 3px 0 rgb(0 0 0 / 0.4);
   --shadow-pop: 0 24px 48px -12px rgb(0 0 0 / 0.7), 0 2px 8px -2px rgb(0 0 0 / 0.5);
+
+  /*
+    The v2 landing palette, re-pointed. Same role names, and the same rule as
+    the ramps above: jade and violet get *lighter* on a dark ground so that
+    `text-nx-jade-ink` still means "readable accent text", and the soft tints
+    invert from a pale wash to a deep one so `bg-nx-jade-soft` still means "the
+    quiet fill underneath".
+  */
+  --color-nx-bg: #080b11;
+  --color-nx-surface: #11151d;
+  --color-nx-line: #222936;
+  --color-nx-line-strong: #2f3745;
+
+  --color-nx-ink: #eef1f7;
+  --color-nx-muted: #9aa4b6;
+  --color-nx-faint: #6f7a8c;
+
+  --color-nx-jade: #2fd3a3;
+  --color-nx-jade-hover: #4ce0b6;
+  --color-nx-jade-ink: #52ddb2;
+  --color-nx-jade-soft: #0b2b23;
+  --color-nx-jade-line: #1c4c3f;
+
+  --color-nx-violet: #8b8cf5;
+  --color-nx-violet-ink: #a3a4f8;
+  --color-nx-violet-soft: #191a33;
+  --color-nx-violet-line: #33355e;
+
+  --color-nx-amber: #efb45f;
+  --color-nx-amber-ink: #f3c884;
+  --color-nx-amber-soft: #2c2109;
+  --color-nx-amber-line: #4d3a12;
+
+  /* The jade fill is luminous here, so its label goes dark — the same flip the
+     product's own primary button makes. */
+  --color-nx-on-fill: #05221b;
+
+  /* Shadows carry no light on a dark ground; depth comes from the surface
+     being lighter than the page, so these mostly get out of the way. */
+  --shadow-nx-soft: 0 1px 2px rgb(0 0 0 / 0.5), 0 8px 24px -12px rgb(0 0 0 / 0.6);
+  --shadow-nx-lift: 0 2px 4px rgb(0 0 0 / 0.5), 0 18px 40px -16px rgb(0 0 0 / 0.7);
+  --shadow-nx-hero: 0 4px 8px rgb(0 0 0 / 0.5), 0 40px 80px -32px rgb(0 0 0 / 0.8);
 }
 
 /*
@@ -556,7 +699,142 @@
     --shadow-card: 0 1px 2px 0 rgb(0 0 0 / 0.4);
     --shadow-raised: 0 4px 16px -4px rgb(0 0 0 / 0.55), 0 1px 3px 0 rgb(0 0 0 / 0.4);
     --shadow-pop: 0 24px 48px -12px rgb(0 0 0 / 0.7), 0 2px 8px -2px rgb(0 0 0 / 0.5);
+
+    --color-nx-bg: #080b11;
+    --color-nx-surface: #11151d;
+    --color-nx-line: #222936;
+    --color-nx-line-strong: #2f3745;
+
+    --color-nx-ink: #eef1f7;
+    --color-nx-muted: #9aa4b6;
+    --color-nx-faint: #6f7a8c;
+
+    --color-nx-jade: #2fd3a3;
+    --color-nx-jade-hover: #4ce0b6;
+    --color-nx-jade-ink: #52ddb2;
+    --color-nx-jade-soft: #0b2b23;
+    --color-nx-jade-line: #1c4c3f;
+
+    --color-nx-violet: #8b8cf5;
+    --color-nx-violet-ink: #a3a4f8;
+    --color-nx-violet-soft: #191a33;
+    --color-nx-violet-line: #33355e;
+
+    --color-nx-amber: #efb45f;
+    --color-nx-amber-ink: #f3c884;
+    --color-nx-amber-soft: #2c2109;
+    --color-nx-amber-line: #4d3a12;
+
+    --color-nx-on-fill: #05221b;
+
+    --shadow-nx-soft: 0 1px 2px rgb(0 0 0 / 0.5), 0 8px 24px -12px rgb(0 0 0 / 0.6);
+    --shadow-nx-lift: 0 2px 4px rgb(0 0 0 / 0.5), 0 18px 40px -16px rgb(0 0 0 / 0.7);
+    --shadow-nx-hero: 0 4px 8px rgb(0 0 0 / 0.5), 0 40px 80px -32px rgb(0 0 0 / 0.8);
   }
+}
+
+/*
+  ─────────────────────────────────────────────────────────────────────────────
+  THE BRIDGE — `.nx-root`
+  ─────────────────────────────────────────────────────────────────────────────
+  Everything inside an element carrying this class renders the *product's* own
+  components in the v2 palette, with no component changes at all.
+
+  The login page is what forced this. It uses `TextField` and `Button` — shared
+  controls with a hundred call sites across the signed-in app — and putting
+  them on the new ground meant either duplicating their accessibility wiring
+  into a second set of components, or threading a `tone` prop through every
+  layer, or repainting the whole app to restyle one page.
+
+  None of that is necessary, because the ramps in this file are used
+  *semantically*: `border-ink-300` means "the resting edge of an input", not
+  "#c4c9c4". Re-point the role inside a scope and every component that asked
+  for the role follows. That is the exact promise made at the top of this file,
+  and this block is where it gets collected.
+
+  Custom properties inherit, so a declaration on this div beats the one on
+  `:root` for its whole subtree — specificity never enters into it, because the
+  two rules match different elements. Which also means the dark palette above
+  still applies: `--color-nx-*` has already been re-pointed by the time these
+  aliases read it, so the scope is theme-correct for free.
+
+  Two consequences worth stating plainly. Adding this class to a page migrates
+  it wholesale — there is no half-migrated state to reason about. And when
+  every page carries it, this block moves to `:root`, the aliases become the
+  definitions, and the ramps above are deleted.
+*/
+.nx-root {
+  /* Surfaces. `shell` and `paper` collapse to one ground: the v2 design gets
+     its depth from the aurora and from shadow, not from a darker workspace. */
+  --color-paper: var(--color-nx-bg);
+  --color-shell: var(--color-nx-bg);
+  --color-surface: var(--color-nx-surface);
+
+  /*
+    Ink, mapped by *role* rather than by number. The v2 palette has three text
+    steps where this one has six, so several ramp steps land on the same
+    target — which is the point: the extra steps were never carrying meaning,
+    they were carrying indecision.
+
+      50/100/200  fills and hairlines
+      300         resting edges
+      400/500     placeholders and small print
+      600/700     secondary text
+      800/900     headings and body
+  */
+  --color-ink-50: var(--color-nx-bg);
+  --color-ink-100: var(--color-nx-line);
+  --color-ink-200: var(--color-nx-line);
+  --color-ink-300: var(--color-nx-line-strong);
+  --color-ink-400: var(--color-nx-faint);
+  --color-ink-500: var(--color-nx-faint);
+  --color-ink-600: var(--color-nx-muted);
+  --color-ink-700: var(--color-nx-muted);
+  --color-ink-800: var(--color-nx-ink);
+  --color-ink-900: var(--color-nx-ink);
+
+  /*
+    Brand → jade. Only the four steps the shared controls actually reach are
+    mapped; 700 and 800 both go to the text-safe step, which keeps the primary
+    button darkening on hover in light mode and lightening in dark, since the
+    v2 palette flips those two the same way the product's does.
+  */
+  --color-brand-50: var(--color-nx-jade-soft);
+  --color-brand-100: var(--color-nx-jade-line);
+  --color-brand-200: var(--color-nx-jade-line);
+  --color-brand-600: var(--color-nx-jade);
+  --color-brand-700: var(--color-nx-jade-ink);
+  --color-brand-800: var(--color-nx-jade-ink);
+  --color-on-brand: var(--color-nx-on-fill);
+
+  /*
+    This one line is why the focus ring needs no rule of its own: the base
+    layer's `:focus-visible` outline is `outline-brand-600`, so re-pointing
+    brand turns every focus ring inside the scope jade automatically.
+  */
+
+  /* Corners. Rounder than the product's dense chrome, short of the full pills
+     the marketing CTAs use — a stack of pill-shaped text inputs is a style
+     with no reading advantage, and a form is for reading. */
+  --radius-control: 0.875rem;
+  --radius-card: var(--radius-nx);
+  --radius-panel: var(--radius-nx-lg);
+
+  /*
+    Shadows are deliberately NOT aliased here, and it is not an oversight.
+
+    Colour and radius utilities compile to `var(--color-ink-300)` and
+    `var(--radius-control)`, which is why re-pointing them from a scope works
+    at all. Tailwind v4 resolves `--shadow-*` at build time instead — it has to
+    splice `--tw-shadow-color` into every layer of the value — so `shadow-card`
+    emits the literal shadow and would ignore an alias written here. Leaving
+    the three lines in would look like they were doing something.
+
+    Where a v2 shadow is wanted, ask for it by name: `shadow-nx-soft`,
+    `shadow-nx-lift`, `shadow-nx-hero`. The product shadows the shared controls
+    already carry are a 1px hairline apart from the v2 ones, so nothing on a
+    migrated page looks wrong for the want of this.
+  */
 }
 
 /*
@@ -674,4 +952,52 @@
     linear-gradient(to bottom, var(--color-ink-200) 1px, transparent 1px);
   background-size: 3.5rem 3.5rem;
   mask-image: linear-gradient(to bottom, black, transparent 85%);
+}
+
+/*
+  ─────────────────────────────────────────────────────────────────────────────
+  Utilities for the v2 landing page
+  ─────────────────────────────────────────────────────────────────────────────
+*/
+
+/**
+ * The v2 display voice: Archivo pulled *in* along its width axis.
+ *
+ * The exact inverse of `type-wide`, and the single clearest signal that these
+ * are two different designs sharing one typeface. Narrow letterforms at large
+ * sizes with tight tracking read as contemporary and fast; the wide setting on
+ * the current page reads as stationery and authority. Same font file, opposite
+ * personality, no second webfont to download.
+ */
+@utility type-tight {
+  font-variation-settings: "wdth" 94;
+}
+
+/**
+ * A translucent surface over the aurora field.
+ *
+ * `color-mix` rather than a hard-coded rgba so the glass follows the theme:
+ * light mode mixes white down to 72%, dark mode mixes #11151d, and neither has
+ * to be written twice. `saturate` compensates for the wash the blur puts over
+ * whatever colour is behind it — without it, glass over the aurora goes grey.
+ */
+@utility nx-glass {
+  background-color: color-mix(
+    in srgb,
+    var(--color-nx-surface) 72%,
+    transparent
+  );
+  backdrop-filter: blur(16px) saturate(140%);
+}
+
+/**
+ * Fine film grain over the gradient blobs.
+ *
+ * Large, smooth gradients band badly on 8-bit displays — visible stepped rings
+ * exactly where the aurora is at its softest. A few percent of noise dithers
+ * the transition and the banding disappears. It is an SVG filter rather than
+ * an image so it costs no request and scales to any viewport.
+ */
+@utility nx-noise {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }

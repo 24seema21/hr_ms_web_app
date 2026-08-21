@@ -10,6 +10,17 @@
  */
 export const ROUTES = {
   HOME: '/',
+  /*
+    The *previous* landing design, parked here after the v2 page was promoted
+    to HOME. Public and unguarded on purpose — the point is to be able to open
+    both in one browser and flip between them.
+
+    The name reads backwards now, deliberately left alone rather than renamed:
+    this route is temporary, and it goes together with the `features/landing`
+    slice as soon as the comparison stops being useful. Nothing links to it
+    except the footer of the page it is being compared against.
+  */
+  LANDING_V2: '/v2',
   LOGIN: '/login',
   DASHBOARD: '/dashboard',
   EMPLOYEES: '/employees',
